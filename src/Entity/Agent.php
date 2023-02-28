@@ -15,9 +15,41 @@ class Agent extends Person{
 
     $agent = $dbrequest->requestProcedure('get_agent', [$id]);
 
-    parent::__construct($agent[0]['lastname'], $agent[0]['firstname'], DateTime::createFromFormat('Y-m-d', $agent[0]['birthdate']));
+    parent::__construct(
+      $agent[0]['lastname'], 
+      $agent[0]['firstname'], 
+      $agent[0]['birthdate'],
+      $agent[0]['nationality']);
 
     $this->identification_code = $agent[0]['code_id'];
+  }
+
+  public static function agentByID(int $id) {
+    $dbrequest = new DatabaseRequest($_SERVER['runtime']->getSettings()->getDBConfig());
+
+    $agent = $dbrequest->requestProcedure('get_agent', [$id]);
+
+    if (count($agent) > 0){
+      $instance = new self(
+        $agent[0]['agent_id']
+      );
+
+      return $instance;
+    }
+
+    return false;
+  }
+
+  public static function newAgent(string $lastname, string $firstname, string $birthdate, int $country, string $name_code, int $speciality) {
+
+    $dbrequest = new DatabaseRequest($_SERVER['runtime']->getSettings()->getDBConfig());
+    
+    $arguments = [
+      $lastname, $firstname, $birthdate, $country, $name_code, $speciality
+    ];
+
+    $agent = $dbrequest->requestProcedure('new_agent', $arguments);
+
   }
 
   /**

@@ -72,6 +72,21 @@ class DatabaseRequest
     return $this->db_ready;
   }
 
+  private function get_PDO() {
+
+    try {
+ 
+      $dsn = 'mysql:host='.$this->db_host.';dbname='.$this->db_name.';';
+
+      return new PDO($dsn, $this->db_user, $this->db_pass);
+
+    } catch (PDOException $e) {
+      echo 'no connection to database';
+      return false;
+    }
+
+  }
+
   /**
    * return an array of result from a selected database
    * return an integer on error
@@ -83,48 +98,64 @@ class DatabaseRequest
    */
   public function requireFromDataBase(array $array, string $table, string $id, string $ref){
 
-    try {
- 
-      $dsn = 'mysql:host='.$this->db_host.';dbname='.$this->db_name.';';
+    $pdo = $this->get_PDO();
 
-      $pdo = new PDO($dsn, $this->db_user, $this->db_pass);
+    if ($pdo) {
 
-    } catch (PDOException $e) {
-      echo 'no connection to database';
-      return 0;
+      $selection = implode(",", $array);
+
+      $request = "SELECT ".$selection." FROM ".$table." WHERE ".$id." = '".$ref."'";
+  
+      $query = $pdo->query($request, PDO::FETCH_ASSOC);
+      $result = $query->fetchAll();
+  
+      return $result;
+
     }
 
-    $selection = implode(",", $array);
-
-    $request = "SELECT ".$selection." FROM ".$table." WHERE ".$id." = '".$ref."'";
-
-    $query = $pdo->query($request, PDO::FETCH_ASSOC);
-    $result = $query->fetchAll();
-
-    return $result;
+    return false;
     
   }
 
   public function requestProcedure(string $procedure, array $arguments = []) {
 
-    try {
- 
-      $dsn = 'mysql:host='.$this->db_host.';dbname='.$this->db_name.';';
+    $pdo = $this->get_PDO();
 
-      $pdo = new PDO($dsn, $this->db_user, $this->db_pass);
+    if ($pdo) {
 
-    } catch (PDOException $e) {
-      echo 'no connection to database';
-      return 0;
+
+      foreach ($arguments as $argument) {
+        $argument .= strval($argument);
+      }
+
+      $s = implode(', ', $arguments);
+
+      $request = "CALL " . $procedure . "(" . $s .")";
+
+      $query = $pdo->query($request, PDO::FETCH_ASSOC);
+      $result = $query->fetchAll();
+
+      return $result;
+
     }
 
-    $request = "CALL " . $procedure . "(". implode(', ', $arguments) .")";
-
-    $query = $pdo->query($request, PDO::FETCH_ASSOC);
-    $result = $query->fetchAll();
-
-    return $result;
+    return false;
   
+  }
+
+  public function requestSpecific(string $command) {
+    
+    $pdo = $this->get_PDO();
+
+    if ($pdo) {
+
+      $query = $pdo->query($command, PDO::FETCH_ASSOC);
+      $result = $query->fetchAll();
+
+      return $result;
+
+    }
+
   }
   
   public function close (DatabaseRequest &$dbRequest) {

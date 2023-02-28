@@ -2,28 +2,27 @@
 
 namespace APP\Entity;
 
-use Core\Models\DatabaseRequest;
 use DateTime;
 
-abstract class Person {
-
-  private int $ID;
+class User {
 
   private string $lastname;
 
   private string $firstname;
 
-  private string $birthdate;
+  private string $mail;
 
-  private string $nationality;
+  private string $password;
 
-  protected function __construct(string $lastname, string $firstname, string $birthdate, string $nationality)
+  private DateTime $creation_date;
+
+  public function __construct(string $lastname, string $firstname, string $mail, string $password, DateTime $creation_date)
   {
     $this->lastname = $lastname;
     $this->firstname = $firstname;
-    $this->birthdate = $birthdate;
-    $this->nationality = $nationality;
-
+    $this->mail = $mail;
+    $this->password = $password;
+    $this->creation_date = $creation_date;
   }
 
   /**
@@ -67,61 +66,61 @@ abstract class Person {
   }
 
   /**
-   * Get the value of birthdate
+   * Get the value of mail
    */ 
-  public function getBirthdate()
+  public function getMail()
   {
-    return $this->birthdate;
+    return $this->mail;
   }
 
   /**
-   * Set the value of birthdate
+   * Set the value of mail
    *
    * @return  self
    */ 
-  public function setBirthdate($birthdate)
+  public function setMail($mail)
   {
-    $this->birthdate = $birthdate;
+    $this->mail = $mail;
 
     return $this;
   }
 
   /**
-   * Get the value of ID
+   * Get the value of password
    */ 
-  public function getID()
+  public function getPassword()
   {
-    return $this->ID;
+    return $this->password;
   }
 
   /**
-   * Set the value of ID
+   * Set the value of password
    *
    * @return  self
    */ 
-  public function setID($ID)
+  public function setPassword($password)
   {
-    $this->ID = $ID;
+    $this->password = $password;
 
     return $this;
   }
 
   /**
-   * Get the value of nationality
+   * Get the value of creation_date
    */ 
-  public function getNationality()
+  public function getCreation_date()
   {
-    return $this->nationality;
+    return $this->creation_date;
   }
 
   /**
-   * Set the value of nationality
+   * Set the value of creation_date
    *
    * @return  self
    */ 
-  public function setNationality($nationality)
+  public function setCreation_date($creation_date)
   {
-    $this->nationality = $nationality;
+    $this->creation_date = $creation_date;
 
     return $this;
   }
