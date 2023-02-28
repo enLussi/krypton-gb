@@ -1,0 +1,9 @@
+{
+  "navigation": [
+    {
+      "link": "dashboard",
+      "display": "Paramètres",
+      "collapser": "Dashboard"
+    }
+  ]
+}

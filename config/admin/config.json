@@ -1,0 +1,10 @@
+{
+    "upkeep": false,
+    "error_display": true,
+    "cookie_enabled": false,
+    "cookie_duration": "43200",
+    "contact": "contact@agora.com",
+    "site_name": "Agora",
+    "site_description": "Create your website simply",
+    "upkeep_message": "Sorry for the inconvenience !"
+}

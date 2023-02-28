@@ -1,0 +1,7 @@
+{
+  "home": {
+    "path": "/",
+    "admin": false,
+    "controller": "App\\Controllers\\HomePageController"
+  }
+}

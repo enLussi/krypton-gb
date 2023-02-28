@@ -1,0 +1,17 @@
+#!/usr/bin/php
+<?php
+define('ABS_PATH', realpath(__DIR__.'/..'));
+
+use Agora\Autoloader\Autoloader;
+use Agora\Console\ConsoleController;
+
+require_once ABS_PATH . '/src/Models/Autoloader.php';
+Autoloader::register();
+
+$argument = explode(':', $argv[1]);
+
+$CC = new ConsoleController();
+
+$CC->executeCommand($argument[0], $argument[1]);
+
+?>
