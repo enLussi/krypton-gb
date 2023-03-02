@@ -11,8 +11,6 @@ class AdminDashboardController extends AdminPageController
 
     $this->title = 'Dashboard';
 
-    $this->self_directory = basename(dirname(__DIR__)) . '/' . basename(__DIR__);
-
     $this->template = 'admin';
 
     $this->script = ABS_PATH . '/templates/backoffice/js/dashboard.js';

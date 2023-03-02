@@ -33,8 +33,6 @@ class Mission {
    $targets, int $type, int $status, $hideouts, string $start_date, string $end_date)
   {
 
-    var_dump(gettype($this->agents) === gettype($agents));
-
     $this->title = $title;
     $this->description = $description;
     $this->name_code = $name_code;
@@ -129,6 +127,14 @@ class Mission {
   array $targets, int $type, string $start_date, string $end_date) {
 
     $dbrequest = new DatabaseRequest($_SERVER['runtime']->getSettings()->getDBConfig());
+    
+
+    foreach( $contacts as $contact ) {
+      $contact_data = $dbrequest->requestProcedure('get_contact', [$contact]);
+      if ($country === $contact_data[0]['country_id']) {
+        return "Le contact doit faire partie du pays où se déroule la mission.";
+      }
+    }
     
     $arguments = [
       $title, $description, $name_code, $country, $type, $start_date, $end_date

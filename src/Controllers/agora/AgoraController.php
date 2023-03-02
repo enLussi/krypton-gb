@@ -2,6 +2,7 @@
 
 namespace Core\Controllers;
 
+use AdminNavigation;
 use App\Controllers\AdminLoginController;
 use App\Controllers\AdminBlogPageController;
 use App\Controllers\ErrorForbiddenController;
@@ -164,7 +165,7 @@ class AgoraController
       //  Création d'une ligne Clients dans la BDD
       // (à changer de json à bdd)
       // -----------------------------------------
-      if (file_exists(ABS_PATH . '/data/Customers/customers_'.date('my').'.json') ) {
+      if (!isset($_SESSION['customer'])) {
         
         $_SESSION['customer'] = [...$this->new_customer, 'uid' => $uid];
 
@@ -270,29 +271,58 @@ class AgoraController
 
     $plugins = array_diff(scandir(CONTROLLERS_PATH), array('..', '.'));
 
-    $path = ABS_PATH . '/config/admin/context.json';
+    $anti_infinite = 0;
 
-    foreach($plugins as $plugin) {
+    while (count($plugins) > 0 ) {
+
+      $can_be_load = true;
+
+
+      $anti_infinite += 1;
+      if ($anti_infinite > 100) {
+        break;
+      }
+
+      $plugin = $plugins[array_key_first($plugins)];
+
       if (is_dir( CONTROLLERS_PATH . '/' . $plugin)) {
 
         $this->event->dispatch('load_plugin', CONTROLLERS_PATH . '/' . $plugin);
 
         if (file_exists(CONTROLLERS_PATH . '/' . $plugin . '/load.php')){
 
-          require_once CONTROLLERS_PATH . '/' . $plugin . '/load.php'; 
-          array_push($this->event_list, $plugin);
+          $context= [];
 
-          /**
-           * Add Data entries for customers data json file
-           */
-          if (function_exists('appendDataCustomer')) {
-            $this->new_customer = appendDataCustomer($this->new_customer);
+          if (file_exists(CONTROLLERS_PATH . '/' . $plugin . '/context.json')) {
+            $context = json_decode(file_get_contents(CONTROLLERS_PATH . '/' . $plugin . '/context.json'), true);
+          }
+
+          if(array_key_exists('dependencies', $context)) {
+            $dependencies = $context['dependencies'];
+
+            foreach($dependencies as $dep) {
+              if (!in_array( $dep, $this->event_list )) {
+                array_push($plugins, array_shift($plugins));
+                $can_be_load = false;
+              }
+            }
+          }
+
+
+          if ($can_be_load) {
+            require_once CONTROLLERS_PATH . '/' . $plugin . '/load.php'; 
+            array_push($this->event_list, $plugin);
+            
           }
 
         }
 
+        if ($can_be_load) {
+          array_shift($plugins);
+        }
+
       }
-      
+
     }
 
   }

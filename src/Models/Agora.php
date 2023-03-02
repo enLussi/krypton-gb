@@ -43,7 +43,6 @@ class Agora {
     $APP = AgoraController::getInstance();
   
     $key = $this->route_exists($APP->getRoutes(), $origine);
-
   
     if ($key !== false) {
   

@@ -1,0 +1,28 @@
+{
+  "navigation": [
+    {
+      "link": "kgb",
+      "display": "Parameters",
+      "collapser": "KGB"
+    },
+    {
+      "link": "kgb-new-mission",
+      "display": "Missions",
+      "collapser": "KGB"
+    },
+    {
+      "link": "kgb-new-involved",
+      "display": "Involved",
+      "collapser": "KGB"
+    },
+    {
+      "link": "kgb-new-hideout",
+      "display": "Hideouts",
+      "collapser": "KGB"
+    }
+  ],
+  "dependencies": [
+    "backoffice"
+  ]
+
+}

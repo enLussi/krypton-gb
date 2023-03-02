@@ -158,7 +158,7 @@ class DatabaseRequest
 
   }
   
-  public function close (DatabaseRequest &$dbRequest) {
+  public static function close (DatabaseRequest &$dbRequest) {
 
     $dbRequest = NULL;
 

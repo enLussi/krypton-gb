@@ -20,7 +20,7 @@ class AdminKGBController extends AdminPageController
   public function index() {
     
 
-    AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.mission', [
+    AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.dashboard', [
     ]);
     
   }

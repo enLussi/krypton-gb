@@ -35,9 +35,7 @@ abstract class PageController
 
     $this->viewPath = TEMPLATES_PATH;
 
-    $this->customers_data = json_decode(file_get_contents(ABS_PATH . "/data/Customers/customers_".date("my").".json"), true);
-
-    $this->admin_navigation = TEMPLATES_PATH . '/backoffice/html/navigation-admin.php';
+    $this->customers_data = $_SESSION['customer'];
 
     $this->InstancePage->getEventDispatcher()->dispatch('load_page');
     
@@ -70,5 +68,5 @@ abstract class PageController
   {
     return $this->script;
   }
-
+  
 }

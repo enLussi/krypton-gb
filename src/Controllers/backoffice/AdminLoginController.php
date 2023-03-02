@@ -22,7 +22,7 @@ class AdminLoginController extends PageController
     $params = $this->identification();
 
     if ($params || (isset($_SESSION['admin_access']) && $_SESSION['admin_access'] === "access")) {
-      $this->InstancePage->header_redirect('/admin/dashboard');
+      $this->InstancePage->header_redirect('/admin/kgb');
     } else {
       $this->InstancePage->render($this->viewPath, $this->template, 'backoffice.html.login', [$params]);
     }
@@ -39,15 +39,15 @@ class AdminLoginController extends PageController
 
       if($dbRequest->is_ready()) {
 
-        $user = $dbRequest->requireFromDataBase(['login', 'pass_crypted', 'lastname', 'firstname'], 'llx_user', 'login', $ids['idAdmin']);
+        $user = $dbRequest->requireFromDataBase(['mail', 'pass_word', 'lastname', 'firstname'], 'users', 'mail', $ids['idAdmin']);
 
         $first_result = $user[0];
 
         if(
-          (password_verify($ids['pass'], $first_result['pass_crypted']) || 
-          sha1(md5($ids['pass'])) == $first_result['pass_crypted'] || 
-          md5($ids['pass']) == $first_result['pass_crypted']) &&
-          ($ids['idAdmin'] === $first_result['login'])) {
+          (password_verify($ids['pass'], $first_result['pass_word']) || 
+          sha1(md5($ids['pass'])) == $first_result['pass_word'] || 
+          md5($ids['pass']) == $first_result['pass_word']) &&
+          ($ids['idAdmin'] === $first_result['mail'])) {
 
           $username = $first_result['firstname'] . ' ' . $first_result['lastname'];
           $this->InstancePage->getEventDispatcher()->dispatch('admin_login', [$username]);
