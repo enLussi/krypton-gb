@@ -1,17 +1,71 @@
-const form = document.getElementById('mission-prepare');
+const form_prepare = document.getElementById('mission-prepare');
+const form_involved = document.getElementById('mission-involved');
+const submitter = document.getElementById('submitter');
 
 const country_selector = document.getElementById('country');
-const type_selector = document.querySelectorAll('input[name="type"]');
-const target_selector = document.querySelectorAll('input[name="target"]');
-const agent_selector = document.getElementById('agent');
-const contact_selector = document.getElementById('contact');
-const hideout_selector = document.getElementById('hideout');
+const type_selector = document.querySelectorAll('input[name="type[]"]');
+const target_selector = document.querySelectorAll('input[name="target[]"]');
+const target_container = document.getElementById('target');
+const agent_selector = document.getElementById('input[name="agent[]"]');
+const agent_container = document.getElementById('agent');
+const contact_selector = document.getElementById('input[name="contact[]"]');
+const contact_container = document.getElementById('contact');
+const hideout_selector = document.getElementById('input[name="hideout[]"]');
+const hideout_container = document.getElementById('hideout');
 
 initForm();
 
-form.onchange = async () => {
+form_prepare.onchange = async () => {
   updateForm();
 };
+
+submitter.onclick = async () => {
+
+  let allData = new FormData(form_prepare);
+  let toAppend = new FormData(form_involved);
+
+  for (const pair of toAppend.entries()) {
+    allData.append(pair[0], pair[1]);
+  }
+
+  if(
+    form_prepare.checkValidity() && 
+    form_involved.checkValidity() &&
+    document.querySelectorAll('input[name="target[]"]:checked').length > 0 &&
+    document.querySelectorAll('input[name="type[]"]:checked').length > 0 &&
+    document.querySelectorAll('input[name="agent[]"]:checked').length > 0 &&
+    document.querySelectorAll('input[name="contact[]"]:checked').length > 0 &&
+    document.getElementById('start').value < document.getElementById('end').value
+    ) {
+    await fetch ('/admin/kgb-new-mission/send-mission', {
+      method: "POST",
+      body: allData
+    }).then((r) => {
+      if(r.status === 200) {
+        alert('New Mission Created');
+      }
+    });
+  } else {
+    if(document.querySelectorAll('input[name="target[]"]:checked').length == 0) {
+      alert('At least one target.');
+    }
+    if(document.querySelectorAll('input[name="type[]"]:checked').length == 0) {
+      alert('Choose one type of mission.');
+    }
+    if(document.querySelectorAll('input[name="agent[]"]:checked').length == 0) {
+      alert('At least one agent.');
+    }
+    if(document.querySelectorAll('input[name="contact[]"]:checked').length == 0) {
+      alert('At least one contact.');
+    }
+    if (document.getElementById('start').value > document.getElementById('end').value) {
+      alert('Choose a valide range date.');
+    }
+    form_prepare.reportValidity();
+    form_involved.reportValidity();
+  }
+
+}
 
 async function initForm() {
   const data = await fetch('/admin/kgb-new-mission/fetch', {
@@ -25,9 +79,9 @@ async function initForm() {
 
     let disabled = '';
 
-    agent_selector.innerHTML = "";
-    contact_selector.innerHTML = "";
-    hideout_selector.innerHTML = "";
+    agent_container.innerHTML = "";
+    contact_container.innerHTML = "";
+    hideout_container.innerHTML = "";
     let target_country = [];
     let type_spe = 0;
 
@@ -54,14 +108,14 @@ async function initForm() {
       disabled = (!element['spe'].includes(type_spe) || bool_target_country) ?
       `disabled` : ``;
 
-      agent_selector.innerHTML += `
+      agent_container.innerHTML += `
       <div class="form-check">
         <input 
           class="form-check-input" 
           type="checkbox" 
           value="`+element['row_id']+`" 
           id="agent-`+element['row_id']+`" 
-          name="agent-`+element['row_id']+`"
+          name="agent[]"
           `+ disabled +`
           >
         <label class="form-check-label" for="agent-`+element['row_id']+`">
@@ -73,14 +127,14 @@ async function initForm() {
 
     fetchdata['contact'].forEach(element => {
       disabled = country_selector.value != element['country_id'] ? `disabled` : ``;
-      contact_selector.innerHTML += `
+      contact_container.innerHTML += `
       <div class="form-check">
         <input 
           class="form-check-input" 
           type="checkbox" 
           value="`+element['row_id']+`" 
           id="contact-`+element['row_id']+`" 
-          name="contact-`+element['row_id']+`"
+          name="contact[]"
           `+ disabled +`
         >
         <label class="form-check-label" for="contact-`+element['row_id']+`">
@@ -92,14 +146,14 @@ async function initForm() {
 
     fetchdata['hideout'].forEach(element => {
       disabled = country_selector.value != element['country_id'] ? `disabled` : ``;
-      hideout_selector.innerHTML += `
+      hideout_container.innerHTML += `
       <div class="form-check">
         <input 
           class="form-check-input" 
           type="checkbox" 
           value="`+element['row_id']+`" 
           id="hideout-`+element['row_id']+`" 
-          name="hideout-`+element['row_id']+`"
+          name="hideout[]"
           `+ disabled +`
           >
         <label class="form-check-label" for="hideout-`+element['row_id']+`">
@@ -124,6 +178,8 @@ async function updateForm() {
     let disabled = '';
     let target_country = [];
     let type_spe = 0;
+
+    console.log(type_selector);
 
     target_selector.forEach(element => {
       if(element.checked) {
@@ -166,91 +222,3 @@ async function updateForm() {
 
   });
 };
-
-// country_selector.onchange = async () => {
-//   fetchOnChange({
-//     'country': country_selector.value
-//   }, [contact_selector, hideout_selector], ['contacts', 'hideouts']);
-// }
-
-// function fetchOnChange(post,selectors, type) {
-//   fetchData(post).then((t) => {
-//     selectors.forEach((selector, key) => {
-//       fillSelect(selector, JSON.parse(t), type[key])
-//     })
-//   });
-// }
-
-// function fillSelect(id, data, type) {
-
-//   for (i = id.options.length; i > 0; i--) {
-//     id.remove(i);
-//   }
-
-//   if (typeof(data) === 'object'){
-
-//     switch(type) {
-//       case 'hideouts':
-//         data[type].forEach(element => {
-          
-//           const checkbox = document.create
-
-//           id.innerHTML += `
-//             <input class="form-check-input" type="checkbox" value="`+element['row_id']+`" id="target-`+element['row_id']+`" name="target-`+element['row_id']+`">
-//             <label class="form-check-label" for="target-`+element['row_id']+`">
-//             `+element['label'] + ` ` + element['name_code'] + ` ( ` + element['noun'] + ` )`+`
-//             </label>
-//           `;
-//         });
-//         break;
-//       default:
-//         data[type].forEach(element => {
-//           id.innerHTML += `
-//           <input class="form-check-input" type="checkbox" value="`+element['row_id']+`" id="target-`+element['row_id']+`" name="target-`+element['row_id']+`">
-//           <label class="form-check-label" for="target-`+element['row_id']+`">
-//           `+element['firstname'] + ` ` + element['lastname'] + ` ( ` + element['adjective'] + ` )`+`
-//           </label>
-//         `;
-//         });
-//         break;
-//     }
-//   }
-// }
-
-// function addOption (val, txt, select) {
-//   let option = document.createElement("option");
-//   option.value = val;
-//   option.text = txt;
-//   select.add(option, null);
-// }
-
-// async function fetchcountry() {
-
-//   return await fetch('/admin/kgb-new-mission/country', {
-//     method: "POST",
-//   }).then((r) => {
-//     if(r.status === 200) {
-//       return r.text();
-//     }
-//   })
-// }
-
-// async function fetchData(info_array) {
-
-//   let data = new FormData();
-
-
-//   Object.keys(info_array).forEach((key, id) => {
-//     data.append(key, info_array[key]);
-//   });
-  
-
-//   return await fetch('/admin/kgb-new-mission/fetch', {
-//     method: "POST",
-//     body: data,
-//   }).then((r) => {
-//     if(r.status === 200) {
-//       return r.text();
-//     }
-//   })
-// }

@@ -33,13 +33,13 @@
             id="description-mission" 
             name="description-mission" 
             rows="2"
+            required
           >
 
           </textarea>
         </div>
-
-        <select id="status" name="status" class="form-select" aria-label="">
-          <option value="0" selected>Statut de la mission</option>
+        <select id="status" name="status" class="form-select" aria-label="" required>
+          <option value="" selected>Statut de la mission</option>
           <?php 
             foreach($parameters['status'] as $status) {
               ?>
@@ -48,10 +48,12 @@
             }
           ?>
         </select>
+      </div>
+
 
         <div class="mb-4 p-2 border border-1 rounded">
-          <select id="country" name="country" class="form-select" aria-label="">
-            <option value="0" selected>Pays concerné</option>
+          <select id="country" name="country" class="form-select" aria-label="" required>
+            <option value="" selected>Pays concerné</option>
             <?php 
               foreach($parameters['country'] as $country) {
                 ?>
@@ -63,11 +65,12 @@
 
           <div class="mb-4 p-2 border border-1 rounded">
             <h4>Sélectionner le type de mission</h4>
+
               <?php 
                 foreach($parameters['type'] as $type) {
                   ?>
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="type" id="type-<?= $type['row_id']?>" value="<?= $type['row_id']?>">
+                    <input class="form-check-input" type="radio" name="type[]" id="type-<?= $type['row_id']?>" value="<?= $type['row_id']?>">
                     <label class="form-check-label" for="type-<?= $type['row_id']?>">
                       <?= $type['spe_name'] ?>
                     </label>
@@ -77,26 +80,36 @@
               ?>
           </div>
 
-          <div class="mb-4 p-2 border border-1 rounded">
+          <div class="mb-4 p-2 border border-1 rounded" >
             <h4>Sélectionner une ou plusieurs cibles</h4>
+            <div class="form-check" id="target">
             <?php 
                 foreach($parameters['target'] as $target) {
                   ?>
-                  <div class="form-check" id="target">
-                    <input class="form-check-input" type="checkbox" value="<?= $target['row_id']?>" id="target-<?= $target['row_id']?>" name="target">
-                    <label class="form-check-label" for="target-<?= $target['row_id']?>">
+                    <input class="" type="checkbox" value="<?= $target['row_id']?>" id="target-<?= $target['row_id']?>" name="target[]" >
+                    <label class="" for="target-<?= $target['row_id']?>">
                     <?= $target['firstname']." ".$target['lastname'] ." ( ". $target['adjective'] ." )"?>
                     </label>
-                  </div>
                   <?php
                 }
               ?>
+            </div>
           </div>
+
+          <div>
+            <label for="start"></label>
+            <input type="date" name="start" id="start" required>
+          </div>
+
+          <div>
+            <label for="end"></label>
+            <input type="date" name="end" id="end" required>
+          </div>
+
         </div>
-      </div>
     </form>
 
-    <form action="" method="post" id="mission-prepare">
+    <form action="" method="post" id="mission-involved">
       <div class="mb-4 p-2 border border-1 rounded">
         <h4>Sélectionner un ou plusieurs agents</h4>
         <div id="agent">
@@ -106,7 +119,7 @@
 
       <div class="mb-4 p-2 border border-1 rounded">
       <h4>Sélectionner un ou plusieurs contacts</h4>
-        <div id="contact">
+        <div id="contact" >
 
         </div>
       </div>
@@ -118,5 +131,9 @@
         </div>
       </div>
     </form>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <button class="btn btn-primary me-md-2" type="button" id="submitter" form="mission-prepare">Créer la mission</button>
+    </div>
+
   </section>
 </main>

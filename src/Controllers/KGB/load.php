@@ -21,6 +21,11 @@ $this->addRoutes([
     "admin"=> true,
     "controller"=> "App\\Controllers\\AdminFetchInvolvedController"
   ],
+  "new-mission"=> [
+    "path"=> "/admin/kgb-new-mission/send-mission",
+    "admin"=> true,
+    "controller"=> "App\\Controllers\\AdminSendNewMissionController"
+  ],
   "person"=> [
     "path"=> "/admin/kgb-new-involved",
     "admin"=> true,
