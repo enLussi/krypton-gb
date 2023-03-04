@@ -40,7 +40,7 @@ class AdminMissionController extends AdminPageController
       INNER JOIN (SELECT row_id as cid, noun, adjective FROM country) AS b ON country_id = b.cid"
     );
     
-    $dbrequest->close($dbrequest);
+    DatabaseRequest::close($dbrequest);
 
     AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.mission', [
       "country" => $country,

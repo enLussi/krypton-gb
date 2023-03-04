@@ -13,6 +13,15 @@ const contact_container = document.getElementById('contact');
 const hideout_selector = document.getElementById('input[name="hideout[]"]');
 const hideout_container = document.getElementById('hideout');
 
+const modal_warner = document.getElementById('modal-warner-form');
+const message_warner = document.getElementById('modal-warner-form-message');
+const close = document.getElementById('modal-close');
+
+close.onclick = () => {
+  modal_warner.style.display = "none";
+  message_warner.innerHTML = "";
+}
+
 initForm();
 
 form_prepare.onchange = async () => {
@@ -20,7 +29,7 @@ form_prepare.onchange = async () => {
 };
 
 submitter.onclick = async () => {
-
+  message_warner.innerHTML = "";
   let allData = new FormData(form_prepare);
   let toAppend = new FormData(form_involved);
 
@@ -42,28 +51,37 @@ submitter.onclick = async () => {
       body: allData
     }).then((r) => {
       if(r.status === 200) {
-        alert('New Mission Created');
+        
       }
     });
   } else {
     if(document.querySelectorAll('input[name="target[]"]:checked').length == 0) {
-      alert('At least one target.');
+      modal_warner.style.display = "block";
+      message_warner.innerHTML += "Sélectionner au moins une cible<br>";
     }
     if(document.querySelectorAll('input[name="type[]"]:checked').length == 0) {
-      alert('Choose one type of mission.');
+      modal_warner.style.display = "block";
+      message_warner.innerHTML += "Sélectionner un type de mission<br>";
     }
     if(document.querySelectorAll('input[name="agent[]"]:checked').length == 0) {
-      alert('At least one agent.');
+      modal_warner.style.display = "block";
+      message_warner.innerHTML += "Sélectionner au moins un agent<br>";
     }
     if(document.querySelectorAll('input[name="contact[]"]:checked').length == 0) {
-      alert('At least one contact.');
+      modal_warner.style.display = "block";
+      message_warner.innerHTML += "Sélectionner au moins un contact<br>";
     }
     if (document.getElementById('start').value > document.getElementById('end').value) {
-      alert('Choose a valide range date.');
+      modal_warner.style.display = "block";
+      message_warner.innerHTML += "Sélectionner des dates cohérentes<br>";
     }
     form_prepare.reportValidity();
     form_involved.reportValidity();
+
+    return;
   }
+
+  location.reload();
 
 }
 

@@ -30,8 +30,8 @@ class AdminSendNewMissionController extends AdminPageController
       "'".$post['title-mission']."'", 
       "'".$post['description-mission']."'", 
       "'".$post['name_code']."'", 
-      2, 
-      1, 
+      intval($post['country']), 
+      intval($post['type']), 
       "'".$post['start']."'", 
       "'".$post['end']."'"
     ]);

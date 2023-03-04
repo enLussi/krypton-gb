@@ -34,9 +34,7 @@
             name="description-mission" 
             rows="2"
             required
-          >
-
-          </textarea>
+          ></textarea>
         </div>
         <select id="status" name="status" class="form-select" aria-label="" required>
           <option value="" selected>Statut de la mission</option>
@@ -97,12 +95,12 @@
           </div>
 
           <div>
-            <label for="start"></label>
+            <label for="start">Date de départ de la mission</label>
             <input type="date" name="start" id="start" required>
           </div>
 
           <div>
-            <label for="end"></label>
+            <label for="end">Date de fin de mission</label>
             <input type="date" name="end" id="end" required>
           </div>
 
@@ -136,4 +134,19 @@
     </div>
 
   </section>
+
+  <div class="modal" tabindex="-1" id="modal-warner-form" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Erreur dans le Formulaire</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="modal-close"></button>
+        </div>
+        <div class="modal-body">
+          <p id="modal-warner-form-message"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
