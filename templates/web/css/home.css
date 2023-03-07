@@ -1,4 +1,4 @@
-.mission {
+.mission, .list {
   display: flex;
   flex-direction: row;
 

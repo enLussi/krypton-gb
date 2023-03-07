@@ -21,55 +21,8 @@ class AdminInvolvedController extends AdminPageController
   public function index() {
 
     $dbrequest = new DatabaseRequest($_SERVER['runtime']->getSettings()->getDBConfig());
+    $involved = [];
 
-    if(isset($_POST) && count($_POST) > 0) {
-
-      $post = $_POST;
-
-      var_dump($post);
-
-      switch($_POST['involved']) {
-        case "1":
-          $agent = $dbrequest->requestProcedure('new_agent', [
-            "'".$post['lastname']."'",
-            "'".$post['firstname']."'",
-            "'".$post['birthday']."'",
-            intval($post['country']),
-            "'".$post['name_code']."'"
-          ]);
-          var_dump($agent);
-          foreach($post['type'] as $type) {
-            $dbrequest->requestProcedure(('assign_spe_to_agent'), [
-              $agent[0]['out_param'],
-              intval($type)
-            ]);
-          }
-          break;
-        case "2":
-          $dbrequest->requestProcedure('new_contact', [
-            $post['lastname'],
-            $post['firstname'],
-            $post['birthday'],
-            intval($post['country']),
-            $post['name_code']
-          ]);
-          break;
-        case "3":
-          $dbrequest->requestProcedure('new_target', [
-            $post['lastname'],
-            $post['firstname'],
-            $post['birthday'],
-            intval($post['country']),
-            $post['name_code']
-          ]);
-          break;
-        default:
-          break;
-      }
-
-    }
-    
-    
     $country = $dbrequest->requestSpecific(
       "SELECT * FROM country"
     );
@@ -78,11 +31,34 @@ class AdminInvolvedController extends AdminPageController
       "SELECT * FROM speciality"
     );
 
+    if(isset($_GET['agent']) && $_GET['agent'] > 0) {
+
+      $involved = $dbrequest->requestProcedure('get_agent', [$_GET['agent']])[0];
+      $specialities = [];
+
+      foreach($dbrequest->requestProcedure('get_spe_of_agent', [$_GET['agent']]) as $spe) {
+        array_push($specialities, $spe['spe_id']);
+      }
+      $involved = [...$involved, 'specialities' => $specialities];
+
+    }
+    if(isset($_GET['contact']) && $_GET['contact'] > 0) {
+
+      $involved = $dbrequest->requestProcedure('get_contact', [$_GET['contact']])[0];
+
+    }
+    if(isset($_GET['target']) && $_GET['target'] > 0) {
+
+      $involved = $dbrequest->requestProcedure('get_target', [$_GET['target']])[0];
+
+    }
+
     DatabaseRequest::close($dbrequest);
 
     AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.involved', [
       'country' => $country,
-      'type' => $type
+      'type' => $type,
+      'involved' => $involved
     ]);
     
   }

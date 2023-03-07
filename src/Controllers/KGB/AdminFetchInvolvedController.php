@@ -29,8 +29,6 @@ class AdminFetchInvolvedController extends AdminPageController
       INNER JOIN (SELECT row_id as cid, noun, adjective FROM country) AS b ON country_id = b.cid"
     );
 
-    // var_dump($agent);
-
     foreach ( $agent as $id => $a ) {
 
       $spe_by_agent = $dbrequest->requestSpecific(

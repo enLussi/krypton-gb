@@ -6,6 +6,8 @@ use Core\Models\DatabaseRequest;
 
 class Hideout {
 
+  private int $ID;
+
   private string $name_code;
 
   private string $address;
@@ -26,7 +28,7 @@ class Hideout {
       if(key_exists('name_code', $hideout[0]) && !is_null($hideout[0]['name_code'])) {
         $this->name_code = $hideout[0]['name_code'];
       }
-
+      $this->ID = $id;
       $this->address = $hideout[0]['address'];
       $this->type = $hideout[0]['label'];
       $this->country = $hideout[0]['country'];
@@ -44,10 +46,10 @@ class Hideout {
       $instance = new self(
         $hideout[0]['row_id']
       );
-
+      DatabaseRequest::close($dbrequest);
       return $instance;
     }
-
+    DatabaseRequest::close($dbrequest);
     return false;
   }
 
@@ -59,7 +61,7 @@ class Hideout {
       $name_code, $address, $type, $country
     ];
 
-    $contact = $dbrequest->requestProcedure('new_hideout', $arguments);
+    return self::hideoutByID($dbrequest->requestProcedure('new_hideout', $arguments)[0]['out_param']);
 
   }
 
@@ -139,6 +141,26 @@ class Hideout {
   public function setCountry($country)
   {
     $this->country = $country;
+
+    return $this;
+  }
+
+  /**
+   * Get the value of ID
+   */ 
+  public function getID()
+  {
+    return $this->ID;
+  }
+
+  /**
+   * Set the value of ID
+   *
+   * @return  self
+   */ 
+  public function setID($ID)
+  {
+    $this->ID = $ID;
 
     return $this;
   }

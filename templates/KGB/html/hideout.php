@@ -5,14 +5,33 @@
 
   <section>
     <form action="" method="post" id="mission-hideout">
+    <input type="hidden" name="id" value="<?= count($parameters['hideout']) > 0 ? $parameters['hideout']['row_id'] : "" ?>">
+    <input type="hidden" name="modify" value="<?= count($parameters['hideout']) > 0 ? true : false ?>">
       <div class="input-group mb-3">
         <span class="input-group-text" id="inputGroup-sizing-default">Nom de Code de la Planque</span>
-        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="name_code" required>
+        <input 
+          type="text" 
+          class="form-control" 
+          aria-label="Sizing example input" 
+          aria-describedby="inputGroup-sizing-default" 
+          name="name_code"
+          value="<?= count($parameters['hideout']) > 0 ? $parameters['hideout']['name_code'] : "" ?>" 
+          required
+        >
       </div>
 
       <div class="input-group mb-3">
         <span class="input-group-text" id="inputGroup-sizing-default">Adresse de la Planque</span>
-        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="address" name="address" required>
+        <input 
+          type="text" 
+          class="form-control" 
+          aria-label="Sizing example input" 
+          aria-describedby="inputGroup-sizing-default" 
+          id="address" 
+          name="address" 
+          value="<?= count($parameters['hideout']) > 0 ? $parameters['hideout']['address'] : "" ?>"
+          required
+        >
       </div>
 
       <select id="country" name="country" class="form-select" aria-label="" required>
@@ -20,7 +39,12 @@
         <?php 
           foreach($parameters['country'] as $country) {
             ?>
-            <option value="<?= $country['row_id']?>"><?= $country['noun'] ?></option>
+            <option 
+              value="<?= $country['row_id']?>" 
+                <?=count($parameters['hideout']) > 0 ? 
+                  ($parameters['hideout']['country_id']===$country['row_id']? "selected" : "") 
+                : "" ?>     
+            ><?= $country['noun'] ?></option>
             <?php
           }
         ?>
@@ -31,7 +55,17 @@
           foreach($parameters['type'] as $type) {
             ?>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="hideout-type" id="type-<?= $type['row_id']?>" value="<?= $type['row_id']?>" required>
+              <input 
+                class="form-check-input" 
+                type="radio" 
+                name="hideout-type" 
+                id="type-<?= $type['row_id']?>" 
+                value="<?= $type['row_id']?>" 
+                <?=count($parameters['hideout']) > 0 ? 
+                  ($parameters['hideout']['type_id']===$type['row_id']? "checked" : "") 
+                : "" ?>
+                required
+              >
               <label class="form-check-label" for="type-<?= $type['row_id']?>">
                 <?= $type['label'] ?>
               </label>
@@ -42,7 +76,8 @@
       </div>
 
       <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <button class="btn btn-primary me-md-2" type="submit" id="submitter" form="mission-hideout">Créer la mission</button>
+        <button class="btn btn-primary me-md-2" type="submit" id="submitter" form="mission-hideout"
+          ><?= count($parameters['hideout']) > 0 ? "Modifier la planque" : "Créer la planque" ?></button>
       </div>
 
     </form>

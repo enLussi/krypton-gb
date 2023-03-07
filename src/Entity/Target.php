@@ -7,8 +7,6 @@ use DateTime;
 
 class Target extends Person{
 
-  private string $name_code;
-
   private function __construct(int $id)
   {
 
@@ -17,12 +15,12 @@ class Target extends Person{
     $target = $dbrequest->requestProcedure('get_target', [$id]);
 
     parent::__construct(
+      $id,
       $target[0]['lastname'], 
       $target[0]['firstname'], 
-      $target[0]['birthdate'], 
-      $target[0]['nationality']);
-
-    $this->name_code = $target[0]['name_code'];
+      $target[0]['birthdate'],  
+      $target[0]['nationality'],
+      $target[0]['name_code']);
   }
 
   public static function targetByID(int $id) {
@@ -49,27 +47,19 @@ class Target extends Person{
       $lastname, $firstname, $birthdate, $country, $name_code
     ];
 
-    $contact = $dbrequest->requestProcedure('new_target', $arguments);
+    return self::targetByID($dbrequest->requestProcedure('new_target', $arguments)[0]['out_param']);
 
   }
 
-  /**
-   * Get the value of name_code
-   */ 
-  public function getName_code()
-  {
-    return $this->name_code;
+  public function jsonSerialize() {
+    return [
+      'id' => $this->getID(),
+      'lastname' => $this->getLastname(),
+      'firstname' => $this->getFirstname(),
+      'birthdate' => $this->getBirthdate(),
+      'nationality' => $this->getNationality(),
+      'name_code' => $this->getName_code(),
+    ];
   }
 
-  /**
-   * Set the value of name_code
-   *
-   * @return  self
-   */ 
-  public function setName_code($name_code)
-  {
-    $this->name_code = $name_code;
-
-    return $this;
-  }
 }

@@ -6,17 +6,17 @@
       "collapser": "KGB"
     },
     {
-      "link": "kgb-new-mission",
+      "link": "kgb-mission",
       "display": "Missions",
       "collapser": "KGB"
     },
     {
-      "link": "kgb-new-involved",
+      "link": "kgb-involved",
       "display": "Involved",
       "collapser": "KGB"
     },
     {
-      "link": "kgb-new-hideout",
+      "link": "kgb-hideout",
       "display": "Hideouts",
       "collapser": "KGB"
     }

@@ -7,6 +7,8 @@ use DateTime;
 
 class Mission {
 
+  private int $id;
+
   private string $title;
 
   private string $description;
@@ -29,10 +31,10 @@ class Mission {
 
   private string $end_date;
 
-  private function __construct(string $title, string $description, string $name_code, int $country, $agents, $contacts, 
+  private function __construct(int $id, string $title, string $description, string $name_code, int $country, $agents, $contacts, 
    $targets, int $type, int $status, $hideouts, string $start_date, string $end_date)
   {
-
+    $this->id = $id;
     $this->title = $title;
     $this->description = $description;
     $this->name_code = $name_code;
@@ -53,78 +55,85 @@ class Mission {
 
     $mission = $dbrequest->requestProcedure('get_mission', [$id]);
 
-    $agents = $dbrequest->requestSpecific('
-      SELECT row_id FROM person 
-      INNER JOIN (
-        SELECT agent_id FROM agent
-        ) AS a ON row_id = agent_id
-      INNER JOIN (
-        SELECT mission_id, person_id FROM assoc_mission_person
-        ) AS b ON row_id = person_id
-      WHERE mission_id = '.$mission[0]['row_id']
-    );
-    $agent_array = [];
-    foreach($agents as $agent) {
-      $agent_array = [...$agent_array, $agent['row_id']];
+    if(count($mission) === 1) {
+
+      $agents = $dbrequest->requestSpecific('
+        SELECT row_id FROM person 
+        INNER JOIN (
+          SELECT agent_id FROM agent
+          ) AS a ON row_id = agent_id
+        INNER JOIN (
+          SELECT mission_id, person_id FROM assoc_mission_person
+          ) AS b ON row_id = person_id
+        WHERE mission_id = '.$mission[0]['row_id']
+      );
+      $agent_array = [];
+      foreach($agents as $agent) {
+        $agent_array = [...$agent_array, Agent::agentByID($agent['row_id']) ];
+      }
+
+      $contacts = $dbrequest->requestSpecific('
+        SELECT row_id FROM person 
+        INNER JOIN (
+          SELECT contact_id FROM contact
+          ) AS a ON row_id = contact_id
+        INNER JOIN (
+          SELECT mission_id, person_id FROM assoc_mission_person
+          ) AS b ON row_id = person_id
+        WHERE mission_id = '.$mission[0]['row_id']
+      );
+      $contact_array = [];
+      foreach($contacts as $contact) {
+        $contact_array = [...$contact_array, Contact::contactByID($contact['row_id'])];
+      }
+
+      $targets = $dbrequest->requestSpecific('
+        SELECT row_id FROM person 
+        INNER JOIN (
+          SELECT target_id FROM target
+          ) AS a ON row_id = target_id
+        INNER JOIN (
+          SELECT mission_id, person_id FROM assoc_mission_person
+          ) AS b ON row_id = person_id
+        WHERE mission_id = '.$mission[0]['row_id']
+      );
+      $target_array = [];
+      foreach($targets as $target) {
+        $target_array = [...$target_array, Target::targetByID($target['row_id']) ];
+      }
+
+      $hideouts = $dbrequest->requestSpecific('
+        SELECT row_id FROM hideout WHERE country_id = '.$mission[0]['country_id']
+      );
+      $hideout_array = [];
+      foreach($hideouts as $hideout) {
+        $hideout_array = [...$hideout_array, Hideout::hideoutByID($hideout['row_id'])];
+      }
+
+      $instance = new self(
+        $id,
+        $mission[0]['title'],
+        $mission[0]['descript'],
+        $mission[0]['name_code'],
+        $mission[0]['country_id'],
+        $agent_array,
+        $contact_array,
+        $target_array,
+        $mission[0]['mission_type_id'],
+        $mission[0]['mission_status_id'],
+        $hideout_array,
+        $mission[0]['start_date'],
+        $mission[0]['end_date'],
+      );
+      DatabaseRequest::close($dbrequest);
+      return $instance;
     }
 
-    $contacts = $dbrequest->requestSpecific('
-      SELECT row_id FROM person 
-      INNER JOIN (
-        SELECT contact_id FROM contact
-        ) AS a ON row_id = contact_id
-      INNER JOIN (
-        SELECT mission_id, person_id FROM assoc_mission_person
-        ) AS b ON row_id = person_id
-      WHERE mission_id = '.$mission[0]['row_id']
-    );
-    $contact_array = [];
-    foreach($contacts as $contact) {
-      $contact_array = [...$contact_array, $contact['row_id']];
-    }
-
-    $targets = $dbrequest->requestSpecific('
-      SELECT row_id FROM person 
-      INNER JOIN (
-        SELECT target_id FROM target
-        ) AS a ON row_id = target_id
-      INNER JOIN (
-        SELECT mission_id, person_id FROM assoc_mission_person
-        ) AS b ON row_id = person_id
-      WHERE mission_id = '.$mission[0]['row_id']
-    );
-    $target_array = [];
-    foreach($targets as $target) {
-      $target_array = [...$target_array, $target['row_id']];
-    }
-
-    $hideouts = $dbrequest->requestSpecific('
-      SELECT row_id FROM hideout WHERE country_id = '.$mission[0]['country_id']
-    );
-    $hideout_array = [];
-    foreach($hideouts as $hideout) {
-      $hideout_array = [...$hideout_array, $hideout['row_id']];
-    }
-
-    $instance = new self(
-      $mission[0]['title'],
-      $mission[0]['descript'],
-      $mission[0]['name_code'],
-      $mission[0]['country_id'],
-      $agent_array,
-      $contact_array,
-      $target_array,
-      $mission[0]['mission_type_id'],
-      $mission[0]['mission_status_id'],
-      $hideout_array,
-      $mission[0]['start_date'],
-      $mission[0]['end_date'],
-    );
-    return $instance;
+    return false;
   }
 
   public static function newMission(string $title, string $description, string $name_code, int $country, array $agents, array $contacts, 
-  array $targets, int $type, string $start_date, string $end_date) {
+  array $targets, int $type, string $start_date, string $end_date, int $status) {
 
     $dbrequest = new DatabaseRequest($_SERVER['runtime']->getSettings()->getDBConfig());
     
@@ -137,7 +146,7 @@ class Mission {
     }
     
     $arguments = [
-      $title, $description, $name_code, $country, $type, $start_date, $end_date
+      $title, $description, $name_code, $country, $type, $start_date, $end_date, $status
     ];
 
     $mission = $dbrequest->requestProcedure('new_mission', $arguments);
@@ -394,4 +403,24 @@ class Mission {
     return $this;
   }
 
+
+  /**
+   * Get the value of id
+   */ 
+  public function getID()
+  {
+    return $this->id;
+  }
+
+  /**
+   * Set the value of id
+   *
+   * @return  self
+   */ 
+  public function setID($id)
+  {
+    $this->id = $id;
+
+    return $this;
+  }
 }

@@ -7,33 +7,48 @@ $this->addRoutes([
     "controller"=> "App\\Controllers\\AdminKGBController"
   ],
   "mission"=> [
-    "path"=> "/admin/kgb-new-mission",
+    "path"=> "/admin/kgb-mission",
     "admin"=> true,
     "controller"=> "App\\Controllers\\AdminMissionController"
   ],
   "mission_country"=> [
-    "path"=> "/admin/kgb-new-mission/country",
+    "path"=> "/admin/kgb-mission/country",
     "admin"=> true,
     "controller"=> "App\\Controllers\\AdminFetchCountryController"
   ],
   "mission_involved"=> [
-    "path"=> "/admin/kgb-new-mission/fetch",
+    "path"=> "/admin/kgb-mission/fetch",
     "admin"=> true,
     "controller"=> "App\\Controllers\\AdminFetchInvolvedController"
   ],
   "new-mission"=> [
-    "path"=> "/admin/kgb-new-mission/send-mission",
+    "path"=> "/admin/kgb-mission/modify",
     "admin"=> true,
-    "controller"=> "App\\Controllers\\AdminSendNewMissionController"
+    "controller"=> "App\\Controllers\\AdminMissionModifyController"
   ],
   "person"=> [
-    "path"=> "/admin/kgb-new-involved",
+    "path"=> "/admin/kgb-involved",
     "admin"=> true,
     "controller"=> "App\\Controllers\\AdminInvolvedController"
   ],
+  "person_modify"=> [
+    "path"=> "/admin/kgb-involved/modify",
+    "admin"=> true,
+    "controller"=> "App\\Controllers\\AdminInvolvedModifyController"
+  ],
+  "person_modify"=> [
+    "path"=> "/admin/kgb-involved/search",
+    "admin"=> true,
+    "controller"=> "App\\Controllers\\AdminInvolvedSearchController"
+  ],
   "hideout"=> [
-    "path"=> "/admin/kgb-new-hideout",
+    "path"=> "/admin/kgb-hideout",
     "admin"=> true,
     "controller"=> "App\\Controllers\\AdminHideoutController"
+  ],
+  "hideout_modify"=> [
+    "path"=> "/admin/kgb-hideout/modify",
+    "admin"=> true,
+    "controller"=> "App\\Controllers\\AdminHideoutModifyController"
   ],
 ]);

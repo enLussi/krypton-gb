@@ -17,12 +17,16 @@ abstract class Person {
 
   private string $nationality;
 
-  protected function __construct(string $lastname, string $firstname, string $birthdate, string $nationality)
+  private string $name_code;
+
+  protected function __construct(int $id, string $lastname, string $firstname, string $birthdate, string $nationality, string $name_code)
   {
+    $this->ID = $id;
     $this->lastname = $lastname;
     $this->firstname = $firstname;
     $this->birthdate = $birthdate;
     $this->nationality = $nationality;
+    $this->name_code = $name_code;
 
   }
 
@@ -122,6 +126,26 @@ abstract class Person {
   public function setNationality($nationality)
   {
     $this->nationality = $nationality;
+
+    return $this;
+  }
+
+  /**
+   * Get the value of name_code
+   */ 
+  public function getName_code()
+  {
+    return $this->name_code;
+  }
+
+  /**
+   * Set the value of name_code
+   *
+   * @return  self
+   */ 
+  public function setName_code($name_code)
+  {
+    $this->name_code = $name_code;
 
     return $this;
   }

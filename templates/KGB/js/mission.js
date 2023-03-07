@@ -22,7 +22,7 @@ close.onclick = () => {
   message_warner.innerHTML = "";
 }
 
-initForm();
+updateForm();
 
 form_prepare.onchange = async () => {
   updateForm();
@@ -46,12 +46,16 @@ submitter.onclick = async () => {
     document.querySelectorAll('input[name="contact[]"]:checked').length > 0 &&
     document.getElementById('start').value < document.getElementById('end').value
     ) {
-    await fetch ('/admin/kgb-new-mission/send-mission', {
+    await fetch ('/admin/kgb-mission/modify', {
       method: "POST",
       body: allData
     }).then((r) => {
       if(r.status === 200) {
-        
+        console.log('OK')
+
+        setTimeout(() => {
+          location.replace('/admin/kgb');
+        }, 2000);
       }
     });
   } else {
@@ -81,12 +85,10 @@ submitter.onclick = async () => {
     return;
   }
 
-  location.reload();
-
 }
 
 async function initForm() {
-  const data = await fetch('/admin/kgb-new-mission/fetch', {
+  const data = await fetch('/admin/kgb-mission/fetch', {
     method: "POST",
   }).then((r) => {
     if(r.status === 200) {
@@ -184,7 +186,7 @@ async function initForm() {
 }
 
 async function updateForm() {
-  const data = await fetch('/admin/kgb-new-mission/fetch', {
+  const data = await fetch('/admin/kgb-mission/fetch', {
     method: "POST",
   }).then((r) => {
     if(r.status === 200) {
@@ -193,11 +195,11 @@ async function updateForm() {
   }).then((t) => {
     let fetchdata = JSON.parse(t);
 
+    console.log(fetchdata);
+
     let disabled = '';
     let target_country = [];
     let type_spe = 0;
-
-    console.log(type_selector);
 
     target_selector.forEach(element => {
       if(element.checked) {

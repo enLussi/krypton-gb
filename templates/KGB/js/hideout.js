@@ -12,14 +12,28 @@ close.onclick = () => {
   message_warner.innerHTML = "";
 }
 
-form_hideout.onsubmit = (e) => {
+form_hideout.onsubmit = async (e) => {
   e.preventDefault();
   console.log(address_regex.test(address_input.value));
   if(address_regex.test(address_input.value)){
-    //form_hideout.onsubmit();
+    if(form_hideout.checkValidity()) {
+      await fetch ('/admin/kgb-hideout/modify', {
+        method: "POST",
+        body: new FormData(form_hideout)
+      }).then((r) => {
+        if(r.status === 200) {
+          console.log('OK')
+
+          setTimeout(() => {
+            location.replace('/admin/kgb');
+          }, 2000);
+        }
+      });
+    }
     return;
   } 
   modal_warner.style.display = "block";
   message_warner.innerHTML += "Donner une adresse valide (exemple.: 23 Rue de la Paix, Paris)";
 
 }
+
