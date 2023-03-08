@@ -162,6 +162,19 @@ class Mission {
 
   }
 
+  public function jsonSerialize() {
+    return [
+      'id' => $this->getID(),
+      'title' => $this->getTitle(),
+      'name_code' => $this->getName_code(),
+      'country' => $this->getCountry(),
+      'type' => $this->getType(),
+      'status' => $this->getStatus(),
+      'start' => $this->getStart_date(),
+      'end' => $this->getEnd_date()
+    ];
+  }
+
 
   /**
    * Get the value of title

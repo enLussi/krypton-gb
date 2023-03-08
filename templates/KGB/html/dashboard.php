@@ -4,24 +4,27 @@
   ?>
   <section>
       <div class="card card-body">
+        <input type="search" name="search-mission" id="search-mission" placeholder="Entrez le titre ou le nom de code de la mission">
+        <div id="mission-result">
         <?php
           foreach($parameters['missions'] as $mission) {
         ?>
           <div class="list">
             <p><?= $mission->getName_code() ?></p>
-            <p><?= $mission->getDescription() ?></p>
-            <p><?= $parameters['country'][$mission->getCountry()]['noun'] ?></p>
             <p><?= $parameters['status'][$mission->getStatus()-1]['label'] ?></p>
+            <p><?= $parameters['country'][$mission->getCountry()-1]['noun'] ?></p>
             <a role="button" href="/admin/kgb-mission?mission=<?= $mission->getId() ?>" class="btn btn-primary btn-sm">Modify</a>
             <button id="mission-<?= $mission->getId() ?>" type="button" class="btn btn-danger btn-sm remove">Remove</button>
           </div>
         <?php
           }
         ?>
+        </div>
       </div>
       <div id="involved" class="card card-body">
-        <input type="text" name="search-involved" id="search-involved" placeholder="">
-      <?php
+        <input type="search" name="search-involved" id="search-involved" placeholder="Entrez le nom de code, le prénom ou le nom de la personne">
+        <div id="involved-result">
+        <?php
           foreach($parameters['agents'] as $agent) {
         ?>
           <div class="list">
@@ -61,22 +64,28 @@
         <?php
           }
         ?>
+        </div>
       </div>
+        
+      
       <div class="card card-body">
-      <?php
-          foreach($parameters['hideouts'] as $hideout) {
-        ?>
-          <div class="list">
-            <p><?= $hideout->getName_code() ?></p>
-            <p><?= $hideout->getAddress() ?></p>
-            <p><?= $hideout->getCountry() ?></p>
-            <p><?= $hideout->getType() ?></p>
-            <a role="button" href="/admin/kgb-hideout?hideout=<?= $hideout->getId() ?>" class="btn btn-primary btn-sm">Modify</a>
-            <button id="hideout-<?= $hideout->getId() ?>" type="button" class="btn btn-danger btn-sm remove">Remove</button>
-          </div>
-        <?php
-          }
-        ?>
+        <input type="search" name="search-hideout" id="search-hideout" placeholder=" Entrez le nom de code de la Planque">
+        <div id="hideout-result">
+          <?php
+            foreach($parameters['hideouts'] as $hideout) {
+          ?>
+            <div class="list">
+              <p><?= $hideout->getName_code() ?></p>
+              <p><?= $hideout->getAddress() ?></p>
+              <p><?= $hideout->getCountry() ?></p>
+              <p><?= $hideout->getType() ?></p>
+              <a role="button" href="/admin/kgb-hideout?hideout=<?= $hideout->getId() ?>" class="btn btn-primary btn-sm">Modify</a>
+              <button id="hideout-<?= $hideout->getId() ?>" type="button" class="btn btn-danger btn-sm remove">Remove</button>
+            </div>
+          <?php
+            }
+          ?>
+        </div>
       </div>
     </div>
   </section>

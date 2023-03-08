@@ -29,7 +29,7 @@ class AdminInvolvedSearchController extends AdminPageController
     foreach(
       $dbrequest->requestSpecific
       ("SELECT row_id FROM person INNER JOIN (SELECT * FROM kgb.target) AS a ON row_id = a.target_id 
-      WHERE name_code LIKE '".$_POST['search']."%'") as $t) 
+      WHERE (name_code LIKE '".$_POST['search']."%') OR firstname LIKE '".$_POST['search']."%' OR lastname LIKE '".$_POST['search']."%'") as $t) 
     {
       $targets = [...$targets, Target::targetByID($t['row_id'])->jsonSerialize()];
     }
@@ -38,7 +38,7 @@ class AdminInvolvedSearchController extends AdminPageController
     foreach(
       $dbrequest->requestSpecific
       ("SELECT row_id FROM person INNER JOIN (SELECT * FROM agent) AS a ON row_id = a.agent_id 
-      WHERE name_code LIKE '".$_POST['search']."%'") as $a) 
+      WHERE (name_code LIKE '".$_POST['search']."%') OR firstname LIKE '".$_POST['search']."%' OR lastname LIKE '".$_POST['search']."%'") as $a) 
     {
       $agents = [...$agents, Agent::agentByID($a['row_id'])->jsonSerialize()];
     }
@@ -47,7 +47,7 @@ class AdminInvolvedSearchController extends AdminPageController
     foreach(
       $dbrequest->requestSpecific
       ("SELECT row_id FROM person INNER JOIN (SELECT * FROM contact) AS a ON row_id = a.contact_id 
-      WHERE name_code LIKE '".$_POST['search']."%'") as $c) 
+      WHERE (name_code LIKE '".$_POST['search']."%') OR firstname LIKE '".$_POST['search']."%' OR lastname LIKE '".$_POST['search']."%'") as $c) 
     {
       $contacts = [...$contacts, Contact::contactByID($c['row_id'])->jsonSerialize()];
     }

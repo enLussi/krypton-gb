@@ -21,6 +21,11 @@ $this->addRoutes([
     "admin"=> true,
     "controller"=> "App\\Controllers\\AdminFetchInvolvedController"
   ],
+  "mission_search"=> [
+    "path"=> "/admin/kgb-mission/search",
+    "admin"=> true,
+    "controller"=> "App\\Controllers\\AdminMissionSearchController"
+  ],
   "new-mission"=> [
     "path"=> "/admin/kgb-mission/modify",
     "admin"=> true,
@@ -36,7 +41,7 @@ $this->addRoutes([
     "admin"=> true,
     "controller"=> "App\\Controllers\\AdminInvolvedModifyController"
   ],
-  "person_modify"=> [
+  "person_search"=> [
     "path"=> "/admin/kgb-involved/search",
     "admin"=> true,
     "controller"=> "App\\Controllers\\AdminInvolvedSearchController"
@@ -50,5 +55,10 @@ $this->addRoutes([
     "path"=> "/admin/kgb-hideout/modify",
     "admin"=> true,
     "controller"=> "App\\Controllers\\AdminHideoutModifyController"
+  ],
+  "hideout_search"=> [
+    "path"=> "/admin/kgb-hideout/search",
+    "admin"=> true,
+    "controller"=> "App\\Controllers\\AdminHideoutSearchController"
   ],
 ]);

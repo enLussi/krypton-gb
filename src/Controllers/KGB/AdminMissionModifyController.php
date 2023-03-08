@@ -26,7 +26,7 @@ class AdminMissionModifyController extends AdminPageController
     var_dump($post);
     if(isset($_POST['modify']) && intval($_POST['modify'])) {
       $dbrequest->requestSpecific(
-        "UPDATE mission SET title = '".$post['title-mission']."', descript='".$post['description-mission']."', 
+        "UPDATE mission SET title = '".$post['title-mission']."', descript='".addslashes($post['description-mission'])."', 
         name_code ='".$post['name_code']."', mission_status_id = ".intval($post['status']).", 
         start_date = '".$post['start']."', end_date = '".$post['end']."', mission_type_id = ".intval($post['type'][0]).", 
         country_id = ".intval($post['country'])." WHERE row_id = ".intval($post['id'])

@@ -72,7 +72,7 @@ class DatabaseRequest
     return $this->db_ready;
   }
 
-  private function get_PDO() {
+  public function get_PDO() {
 
     try {
  

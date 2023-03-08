@@ -65,6 +65,16 @@ class Hideout {
 
   }
 
+  public function jsonSerialize() {
+    return [
+      'id' => $this->getID(),
+      'name_code' => $this->getName_code(),
+      'address' => $this->getAddress(),
+      'type' => $this->getType(),
+      'country' => $this->getCountry()
+    ];
+  }
+
   /**
    * Get the value of name_code
    */ 
