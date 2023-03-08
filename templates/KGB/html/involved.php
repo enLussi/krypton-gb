@@ -66,9 +66,9 @@
         >
       </div>
       
-      <div <?= count($parameters['involved']) > 0 ? 'style="display: none;"' : '' ?>>
+      <div>
 
-        <div >
+        <div>
           <div class="form-check">
             <input 
               class="form-check-input" 
@@ -112,7 +112,6 @@
             </label>
           </div>
         </div>
-        <?php if(isset($_GET['agent'])) { ?>
         <div id="speciality" style="display: none">
           <?php 
             foreach($parameters['type'] as $type) {
@@ -124,7 +123,7 @@
                   name="type[]" 
                   id="type-<?= $type['row_id']?>" 
                   value="<?= $type['row_id']?>"
-                  <?= (count($parameters['involved']) > 0 && in_array($type['row_id'], $parameters['involved']['specialities'])) ? "checked" : "" ?>
+                  <?= isset($parameters['involved']['specialities']) ? ((count($parameters['involved']) > 0 && in_array($type['row_id'], $parameters['involved']['specialities']) && isset($_GET['agent'])) ? "checked" : "") : "" ?>
                   >
                 <label class="form-check-label" for="type-<?= $type['row_id']?>">
                   <?= $type['spe_name'] ?>
@@ -134,7 +133,6 @@
             }
           ?>
         </div>
-        <?php } ?>
       </div>
       <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         <button class="btn btn-primary me-md-2" type="submit" id="submitter" form="mission-involved"

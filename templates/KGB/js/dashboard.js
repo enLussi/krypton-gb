@@ -97,7 +97,7 @@ async function searchInvolved(){
       '<p>'+contacts[element].name_code+'</p>'+
       '<p>'+contacts[element].firstname+' '+contacts[element].lastname+'</p>'+
       '<p>'+contacts[element].nationality+'</p>'+
-      '<a role="button" href="/admin/kgb-involved?agent='+contacts[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
+      '<a role="button" href="/admin/kgb-involved?contact='+contacts[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
       '<button id="involved-'+contacts[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button>'+
       '</div>';
     });
@@ -108,7 +108,7 @@ async function searchInvolved(){
       '<p>'+targets[element].name_code+'</p>'+
       '<p>'+targets[element].firstname+' '+targets[element].lastname+'</p>'+
       '<p>'+targets[element].nationality+'</p>'+
-      '<a role="button" href="/admin/kgb-involved?agent='+targets[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
+      '<a role="button" href="/admin/kgb-involved?target='+targets[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
       '<button id="involved-'+targets[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button>'+
       '</div>';
     });

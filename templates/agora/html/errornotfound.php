@@ -1,7 +1,3 @@
-<?php 
-  var_dump($_SERVER);
-?>
-
 <main class="container-fluid">
   <section class="full-h bg-light row justify-content-md-center align-items-md-center">
     <div class="col-6 p-4 text-center py-5">

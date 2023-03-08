@@ -25,6 +25,7 @@ class AdminHideoutModifyController extends AdminPageController
       var_dump($post);
 
       if(isset($_POST['modify']) && intval($_POST['modify'])) {
+        
         $dbrequest->requestSpecific(
           "UPDATE kgb.hideout 
           SET 

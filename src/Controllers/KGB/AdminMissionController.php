@@ -24,6 +24,7 @@ class AdminMissionController extends AdminPageController
   }
 
   public function index() {
+    
 
     $dbrequest = new DatabaseRequest($_SERVER['runtime']->getSettings()->getDBConfig());
     $mission = [];
@@ -74,31 +75,41 @@ class AdminMissionController extends AdminPageController
     }
 
     if(isset($_GET['mission']) && $_GET['mission'] > 0) {
-      $mission = [...$mission, Mission::missionById($_GET['mission'])];
+      if(count($dbrequest->requestSpecific("SELECT * FROM mission WHERE row_id =".$_GET['mission'])) > 0){
+        $mission = [...$mission, Mission::missionById($_GET['mission'])];
 
-      if( $mission === false) {
-        AgoraController::getInstance()->notfound_redirect();
+        if( $mission === false) {
+          AgoraController::getInstance()->notfound_redirect();
+          exit();
+        }
+
+        $involved_selected = $dbrequest->requestSpecific("SELECT * FROM assoc_mission_person WHERE mission_id =".$_GET['mission']);
+        $hideout_selected = $dbrequest->requestSpecific("SELECT * FROM assoc_mission_hideout WHERE mission_id =".$_GET['mission']);
+
+        AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.mission', [
+          "country" => $country,
+          "type" => $type,
+          "targets" => $targets,
+          "status" => $status,
+          'agents' => $agents,
+          'contacts' => $contacts,
+          'hideouts' => $hideouts,
+          'mission' => $mission,
+          'involved-selected' => $involved_selected,
+          'hideout-selected' => $hideout_selected,
+        ]);
+
+        DatabaseRequest::close($dbrequest);
         exit();
       }
+    }
 
-      $involved_selected = $dbrequest->requestSpecific("SELECT * FROM assoc_mission_person WHERE mission_id =".$_GET['mission']);
-      $hideout_selected = $dbrequest->requestSpecific("SELECT * FROM assoc_mission_hideout WHERE mission_id =".$_GET['mission']);
+    if(!$mission) {
+      $this->script = '';
 
-      AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.mission', [
-        "country" => $country,
-        "type" => $type,
-        "targets" => $targets,
-        "status" => $status,
-        'agents' => $agents,
-        'contacts' => $contacts,
-        'hideouts' => $hideouts,
-        'mission' => $mission,
-        'involved-selected' => $involved_selected,
-        'hideout-selected' => $hideout_selected,
-      ]);
-
-      DatabaseRequest::close($dbrequest);
-      exit();
+      AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.error', [
+      'message' => 'L\'identifiant recherché ne correspond à aucune entrée de la base de donnée.'
+    ]);
     }
     
     

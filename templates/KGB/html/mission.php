@@ -1,7 +1,6 @@
 <main>
   <?php 
     require_once AdminNavigation::getInstance()->getAdminNavigation();
-    var_dump($parameters['mission']);
   ?>
 
   <section>

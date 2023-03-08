@@ -19,7 +19,7 @@ class AdminKGBController extends AdminPageController
 
     $this->template = 'admin';
 
-    $this->style = ABS_PATH . '/templates/web/css/home.css';
+    $this->style = ABS_PATH . '/templates/KGB/css/dashboard.css';
     $this->script = ABS_PATH . '/templates/KGB/js/dashboard.js';
 
   }

@@ -21,6 +21,7 @@ class HomePageController extends PageController
     $this->name = 'home';
     
     $this->style = ABS_PATH . '/templates/web/css/home.css';
+    $this->script = TEMPLATES_PATH . '/web/js/home.js';
     
   }
 

@@ -26,9 +26,51 @@ class AdminInvolvedModifyController extends AdminPageController
       
       var_dump($post);
       if(isset($_POST['modify']) && intval($_POST['modify'])) {
+
+
         $dbrequest->requestSpecific(
           "UPDATE person SET lastname = '".$post['lastname']."', firstname = '".$post['firstname']."', birthdate = '".$post['birthdate']."', country_id = ".intval($post['country']).", name_code = '".$post['name_code']."' WHERE row_id = ".intval($post['id'])
         );
+
+        if(count($dbrequest->requestSpecific("SELECT * FROM agent WHERE agent_id =".$post['id'])) > 0) {
+          $dbrequest->requestSpecific(
+            "DELETE FROM assoc_agent_spe WHERE agent_id=".$post['id']
+          );
+          $dbrequest->requestSpecific(
+            "DELETE FROM agent WHERE agent_id=".$post['id']
+          );
+        }
+        if(count($dbrequest->requestSpecific("SELECT * FROM contact WHERE contact_id =".$post['id'])) > 0) {
+          $dbrequest->requestSpecific(
+            "DELETE FROM contact WHERE contact_id =".$post['id']
+          );
+        }
+        if(count($dbrequest->requestSpecific("SELECT * FROM target WHERE target_id =".$post['id'])) > 0) {
+          $dbrequest->requestSpecific(
+            "DELETE FROM kgb.target WHERE target_id =".$post['id']
+          );
+        }
+
+        switch($post['involved']) {
+          case "1":
+            $dbrequest->requestSpecific("INSERT INTO kgb.agent (agent_id) VALUES (".$post['id'].")");
+            foreach($post['type'] as $type) {
+              $dbrequest->requestProcedure(('assign_spe_to_agent'), [
+                $post['id'],
+                intval($type)
+              ]);
+            }
+            break;
+          case "2":
+            $dbrequest->requestSpecific("INSERT INTO kgb.contact (contact_id) VALUES (".$post['id'].")");
+            break;
+          case "3":
+            $dbrequest->requestSpecific("INSERT INTO kgb.target (target_id) VALUES (".$post['id'].")");
+            break;
+          default:
+            break;
+        }
+        
 
       } elseif(isset($_POST['remove']) && $_POST['remove'] == true ) {
 
