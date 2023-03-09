@@ -1,5 +1,7 @@
 <?php
 
+use Core\Controllers\AgoraController;
+
 $this->event->addListener('admin_login', function ($object) {
     $user_system = substr(
       $_SERVER['HTTP_USER_AGENT'], 
@@ -75,7 +77,7 @@ $this->event->addListener('load_admin', function () {
 
   if (!isset($_SESSION['admin_access']) || $_SESSION['admin_access'] !== 'access') {
 
-    $this->InstancePage->forbidden_redirect();
+    AgoraController::getInstance()->forbidden_redirect();
     exit();
 
   }

@@ -15,15 +15,18 @@ class Mission {
 
   private string $name_code;
 
-  private string $country;
+  private int $country;
+  private string $country_name;
 
   private $agents = [];
   private $contacts = [];
   private $targets = [];
 
-  private string $type;
+  private int $type;
+  private string $type_name;
 
-  private string $status;
+  private int $status;
+  private string $status_label;
 
   private $hideouts = [];
 
@@ -31,19 +34,22 @@ class Mission {
 
   private string $end_date;
 
-  private function __construct(int $id, string $title, string $description, string $name_code, int $country, $agents, $contacts, 
-   $targets, int $type, int $status, $hideouts, string $start_date, string $end_date)
+  private function __construct(int $id, string $title, string $description, string $name_code, int $country, string $country_name, $agents, $contacts, 
+   $targets, int $type, string $type_name, int $status, string $status_label, $hideouts, string $start_date, string $end_date)
   {
     $this->id = $id;
     $this->title = $title;
     $this->description = $description;
     $this->name_code = $name_code;
     $this->country = $country;
+    $this->country_name = $country_name;
     $this->agents = $agents;
     $this->contacts = $contacts;
     $this->targets = $targets;
     $this->type = $type;
+    $this->type_name = $type_name;
     $this->status = $status;
+    $this->status_label = $status_label;
     $this->hideouts = $hideouts;
     $this->start_date = $start_date;
     $this->end_date = $end_date;
@@ -102,8 +108,8 @@ class Mission {
         $target_array = [...$target_array, Target::targetByID($target['row_id']) ];
       }
 
-      $hideouts = $dbrequest->requestSpecific('
-        SELECT row_id FROM hideout WHERE country_id = '.$mission[0]['country_id']
+      $hideouts = $dbrequest->requestSpecific(
+        'SELECT hideout_id FROM assoc_mission_hideout WHERE mission_id = '.$mission[0]['row_id']
       );
       $hideout_array = [];
       foreach($hideouts as $hideout) {
@@ -115,12 +121,15 @@ class Mission {
         $mission[0]['title'],
         $mission[0]['descript'],
         $mission[0]['name_code'],
-        $mission[0]['country_id'],
+        $mission[0]['cid'],
+        $mission[0]['country'],
         $agent_array,
         $contact_array,
         $target_array,
-        $mission[0]['mission_type_id'],
-        $mission[0]['mission_status_id'],
+        $mission[0]['sid'],
+        $mission[0]['spe_name'],
+        $mission[0]['hid'],
+        $mission[0]['m_status'],
         $hideout_array,
         $mission[0]['start_date'],
         $mission[0]['end_date'],
@@ -171,7 +180,8 @@ class Mission {
       'type' => $this->getType(),
       'status' => $this->getStatus(),
       'start' => $this->getStart_date(),
-      'end' => $this->getEnd_date()
+      'end' => $this->getEnd_date(),
+      'description' => $this->getDescription(),
     ];
   }
 
@@ -433,6 +443,66 @@ class Mission {
   public function setID($id)
   {
     $this->id = $id;
+
+    return $this;
+  }
+
+  /**
+   * Get the value of country_name
+   */ 
+  public function getCountry_name()
+  {
+    return $this->country_name;
+  }
+
+  /**
+   * Set the value of country_name
+   *
+   * @return  self
+   */ 
+  public function setCountry_name($country_name)
+  {
+    $this->country_name = $country_name;
+
+    return $this;
+  }
+
+  /**
+   * Get the value of type_name
+   */ 
+  public function getType_name()
+  {
+    return $this->type_name;
+  }
+
+  /**
+   * Set the value of type_name
+   *
+   * @return  self
+   */ 
+  public function setType_name($type_name)
+  {
+    $this->type_name = $type_name;
+
+    return $this;
+  }
+
+  /**
+   * Get the value of status_label
+   */ 
+  public function getStatus_label()
+  {
+    return $this->status_label;
+  }
+
+  /**
+   * Set the value of status_label
+   *
+   * @return  self
+   */ 
+  public function setStatus_label($status_label)
+  {
+    $this->status_label = $status_label;
 
     return $this;
   }

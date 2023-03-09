@@ -41,36 +41,6 @@ class HomePageController extends PageController
 
       $mission = Mission::missionByID($id_mission);
 
-      // $mission_agent = $dbrequest->requestSpecific(
-      //   "SELECT * FROM person 
-      //   INNER JOIN (
-      //     SELECT * FROM assoc_mission_person
-      //     ) AS a ON row_id = a.person_id 
-      //   INNER JOIN (
-      //     SELECT * FROM agent
-      //     ) AS b ON person_id = b.agent_id
-      //   INNER JOIN (
-      //     SELECT noun, adjective, row_id AS cid FROM country
-      //     ) AS c ON country_id = c.cid
-      //   INNER JOIN (
-      //     SELECT agent_id AS aid, spe_id FROM assoc_agent_spe
-      //     ) AS d ON agent_id = d.aid
-      //   INNER JOIN (
-      //     SELECT row_id AS srid, spe_name FROM speciality
-      //     ) AS e ON spe_id = e.srid
-      //     WHERE mission_id =".$id_mission);
-
-      // $mission_spec_agents = [];
-      // foreach($mission_agent as $m)(
-      //   $mission_spec_agents = [...$mission_spec_agents, $dbrequest->requestSpecific(
-      //     "SELECT * FROM assoc_agent_spe
-      //     INNER JOIN (
-      //       SELECT row_id AS srid, spe_name FROM speciality
-      //       ) AS e ON spe_id = e.srid
-      //     WHERE agent_id =".$m['agent_id'])]
-      // );
-
-
       if ( !$mission) {
 
         AgoraController::getInstance()->notfound_redirect();
@@ -79,6 +49,8 @@ class HomePageController extends PageController
 
       $this->title = 'Mission ' . $id_mission;
       $this->name = 'mission';
+      $this->script = '';
+      $this->style = ABS_PATH . '/templates/web/css/mission.css';
 
       AgoraController::getInstance()->render($this->viewPath, $this->template, 'web.html.'.$this->name.'_index', [
         'mission' => $mission,
@@ -96,19 +68,18 @@ class HomePageController extends PageController
       $missions = [...$missions, Mission::missionByID($m['row_id'])];
     }
 
-    // $missions = $dbrequest->requestSpecific("SELECT * FROM mission");
-    // $missions_types = $dbrequest->requestSpecific("SELECT * FROM speciality");
-    // $missions_country = $dbrequest->requestSpecific("SELECT * FROM country");
-    // $missions_status = $dbrequest->requestSpecific("SELECT * FROM mission_status");
+    $missions_types = $dbrequest->requestSpecific("SELECT * FROM speciality");
+    $missions_status = $dbrequest->requestSpecific("SELECT * FROM mission_status");
+    $mission_country = $dbrequest->requestSpecific("SELECT * FROM country");
 
 
     $dbrequest->close($dbrequest);
 
     AgoraController::getInstance()->render($this->viewPath, $this->template, 'web.html.'.$this->name.'_index', [
       'missions' => $missions,
-      // 'missions_types' => $missions_types,
-      // 'missions_country' => $missions_country,
-      // 'missions_status' => $missions_status,
+      'missions_types' => $missions_types,
+      'missions_status' => $missions_status,
+      'missions_country' => $mission_country,
     ]);
 
   }

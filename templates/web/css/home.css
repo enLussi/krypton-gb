@@ -1,7 +1,175 @@
-.mission, .list {
+body, main {
+
+  margin: 0;
+  padding: 0;
+
+  background-color: #fffef4;
+
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+header {
+
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+.stripe {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  background-color: black;
+  color: white;
+  width: 100%;
+  height : 40px;
+
+  text-align: center;
+
+}
+
+.stripe h2 {
+
+  padding: 0;
+  margin: 0;
+  
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.stripe .connexion {
+
+  padding: 0;
+  margin: 0;
+
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  font-size: 14px;
+
+}
+
+#search-mission, #status, #type {
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid black;
+  width: 335px;
+
+  font-size: 14px;
+  padding: 5px;
+}
+
+select, input {
+
+  background-color: transparent;
+
+}
+
+.sorting {
+
+  display: flex;
+  justify-content: center;
+  column-gap: 10px;
+  padding: 10px 0;
+}
+
+#mission-result {
+
+  margin: 30px 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 10px;
+
+}
+
+#mission-result .mission {
+
+  position: relative;
 
   border: 1px solid black;
-  
+  width: clamp(500px, 100%, 1000px);
+  height: 250px;
+
 }
+
+#mission-result .mission .code {
+
+  padding: 10px 10px;
+
+  font-size: 18px;
+
+}
+
+#mission-result .mission .status {
+
+  position: absolute;
+  top: 5px;
+  right: 5px;
+
+  font-size: 12px;
+
+}
+
+#mission-result .mission .link-mission {
+
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+
+  font-size: 12px;
+
+}
+#mission-result .mission .link-mission a {
+
+  color: #3c3cff;
+}
+
+
+#mission-result .mission .label {
+
+  font-weight: 600;
+
+}
+
+#mission-result .mission .mission-body {
+
+  width: 60%;
+  margin: 40px auto 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+  flex-wrap: wrap;
+
+
+
+}
+
+#mission-result .mission .mission-body .description {
+
+
+  margin-top: 40px;
+  width: 100%;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+
