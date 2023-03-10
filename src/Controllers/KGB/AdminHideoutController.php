@@ -34,16 +34,14 @@ class AdminHideoutController extends AdminPageController
       if(count($dbrequest->requestSpecific("SELECT * FROM hideout WHERE row_id =".$_GET['hideout'])) > 0){
 
         $hideout = $dbrequest->requestProcedure('get_hideout', [$_GET['hideout']])[0]; 
-      } 
+      } else {
+        $this->script = '';
 
-    }
+        AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.error', [
+        'message' => 'L\'identifiant recherché ne correspond à aucune entrée de la base de donnée.'
+        ]);
+      }
 
-    if(!$hideout) {
-      $this->script = '';
-
-      AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.error', [
-      'message' => 'L\'identifiant recherché ne correspond à aucune entrée de la base de donnée.'
-    ]);
     }
 
 

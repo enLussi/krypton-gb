@@ -61,11 +61,17 @@ $this->event->addListener('load_plugin', function ($path) {
 
     $file = json_decode(file_get_contents($path . '/context.json'), true);
 
-    $links = $file['navigation'];
+
+    if(isset($file['navigation'])) {
+
+      $links = $file['navigation'];
     
-    foreach($links as $link){
-      AdminNavigation::getInstance()->addAdminNavigationLink($link['link'], $link['display'], $link['collapser']);
+      foreach($links as $link){
+        AdminNavigation::getInstance()->addAdminNavigationLink($link['link'], $link['display'], $link['collapser']);
+      }
+      
     }
+
     
   } else {
 

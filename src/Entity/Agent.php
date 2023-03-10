@@ -16,7 +16,7 @@ class Agent extends Person{
     $agent = $dbrequest->requestProcedure('get_agent', [$id]);
 
     foreach($dbrequest->requestProcedure('get_spe_of_agent', [$id]) as $spe) {
-      array_push($this->specialities, $spe['spe_id']);
+      array_push($this->specialities, $spe['spe_name']);
     }
 
     parent::__construct(

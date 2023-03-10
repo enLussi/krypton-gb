@@ -3,6 +3,7 @@
 namespace Core;
 
 use Core\Controllers\AgoraController;
+use Exception;
 
 class Agora {
 
@@ -15,8 +16,7 @@ class Agora {
 
     $_SERVER['runtime'] = $this;
     
-    $this->load(); 
-    
+    $this->load();  
   }
 
   public function route_exists (array $routes, string $path) {

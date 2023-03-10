@@ -13,7 +13,7 @@ class AdminNavigation {
   private function __construct(){
 
     $this->admin_navigation = TEMPLATES_PATH . '/backoffice/html/navigation-admin.php';
-    $this->addAdminNavigationLink("dashboard", "Paramètres", "Dashboard");
+    // $this->addAdminNavigationLink("dashboard", "Paramètres", "Dashboard");
 
   }
 

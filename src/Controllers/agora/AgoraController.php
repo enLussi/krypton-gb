@@ -6,6 +6,7 @@ use AdminNavigation;
 use App\Controllers\AdminLoginController;
 use App\Controllers\AdminBlogPageController;
 use App\Controllers\ErrorForbiddenController;
+use App\Controllers\ErrorIssueController;
 use App\Controllers\ErrorNotFoundController;
 use App\Controllers\ErrorUpkeepController;
 use App\Controllers\PageController;
@@ -127,6 +128,8 @@ class AgoraController
   }
 
   public function issue_redirect(int $code_error = 0) {
+    $this->controller = new ErrorIssueController($code_error);
+    $this->controller->index();
   }
 
   public function maintenance_redirect() {

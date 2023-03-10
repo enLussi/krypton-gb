@@ -3,6 +3,8 @@
 
 namespace App\Controllers;
 
+use Core\Controllers\AgoraController;
+
 class AdminLogoutController extends AdminPageController
 {
   public function __construct(){
@@ -16,7 +18,7 @@ class AdminLogoutController extends AdminPageController
   public function index() {
 
 
-    $this->InstancePage->getEventDispatcher()->dispatch('admin_logout', $_SESSION['user']);
+    AgoraController::getInstance()->getEventDispatcher()->dispatch('admin_logout', $_SESSION['user']);
 
     unset($_SESSION['admin_access']);
     unset($_SESSION['user']);

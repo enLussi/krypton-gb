@@ -2,6 +2,7 @@
 
 namespace Core\Models;
 
+use Core\Controllers\AgoraController;
 use Exception;
 use PDO;
 use PDOException;
@@ -59,7 +60,7 @@ class DatabaseRequest
         $pdo = new PDO($dsn, $this->db_user, $this->db_pass);
 
       } catch (PDOException $e) {
-        echo 'no connection to database';
+        AgoraController::getInstance()->issue_redirect(101);
         return false;
       }
     
@@ -81,7 +82,7 @@ class DatabaseRequest
       return new PDO($dsn, $this->db_user, $this->db_pass);
 
     } catch (PDOException $e) {
-      echo 'no connection to database';
+      AgoraController::getInstance()->issue_redirect(101);
       return false;
     }
 
@@ -162,6 +163,14 @@ class DatabaseRequest
 
     $dbRequest = NULL;
 
+  }
+
+  /**
+   * Get the value of db_ready
+   */ 
+  public function getDb_ready()
+  {
+    return $this->db_ready;
   }
 }
 

@@ -41,6 +41,10 @@ class AdminLoginController extends PageController
 
         $user = $dbRequest->requireFromDataBase(['mail', 'pass_word', 'lastname', 'firstname'], 'users', 'mail', $ids['idAdmin']);
 
+        if (!(is_array($user) && count($user) > 0)) {
+          return false;
+        }
+
         $first_result = $user[0];
 
         if(
@@ -50,7 +54,7 @@ class AdminLoginController extends PageController
           ($ids['idAdmin'] === $first_result['mail'])) {
 
           $username = $first_result['firstname'] . ' ' . $first_result['lastname'];
-          $this->InstancePage->getEventDispatcher()->dispatch('admin_login', [$username]);
+          AgoraController::getInstance()->getEventDispatcher()->dispatch('admin_login', [$username]);
 
           return true;
         }

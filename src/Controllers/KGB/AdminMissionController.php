@@ -101,16 +101,17 @@ class AdminMissionController extends AdminPageController
 
         DatabaseRequest::close($dbrequest);
         exit();
+      } else {
+        $this->script = '';
+    
+          AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.error', [
+          'message' => 'L\'identifiant recherché ne correspond à aucune entrée de la base de donnée.'
+        ]);
       }
+
     }
 
-    if(!$mission) {
-      $this->script = '';
 
-      AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.error', [
-      'message' => 'L\'identifiant recherché ne correspond à aucune entrée de la base de donnée.'
-    ]);
-    }
     
     
 

@@ -18,3 +18,4 @@ class ErrorNotFoundController extends PageController
 
   }
 }
+?>

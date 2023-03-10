@@ -45,29 +45,42 @@ class AdminInvolvedController extends AdminPageController
           $involved = [...$involved, 'specialities' => $specialities];
   
         }
+      } else {
+        $this->script = '';
+
+        AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.error', [
+          'message' => 'L\'identifiant recherché ne correspond à aucune entrée de la base de donnée.'
+        ]);
+        exit;
       }
     }
     if(isset($_GET['contact']) && $_GET['contact'] > 0) {
       if(count($dbrequest->requestSpecific("SELECT * FROM contact WHERE contact_id =".$_GET['contact'])) > 0) {
         $involved = $dbrequest->requestProcedure('get_contact', [$_GET['contact']])[0];
+      } else {
+        $this->script = '';
+
+        AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.error', [
+          'message' => 'L\'identifiant recherché ne correspond à aucune entrée de la base de donnée.'
+        ]);
+        exit;
       }
     }
     if(isset($_GET['target']) && $_GET['target'] > 0) {
       if(count($dbrequest->requestSpecific("SELECT * FROM target WHERE target_id =".$_GET['target'])) > 0) {
         $involved = $dbrequest->requestProcedure('get_target', [$_GET['target']])[0];
+      } else {
+        $this->script = '';
+
+        AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.error', [
+          'message' => 'L\'identifiant recherché ne correspond à aucune entrée de la base de donnée.'
+        ]);
+        exit;
       }
     }
 
     DatabaseRequest::close($dbrequest);
 
-    if(!$involved) {
-      $this->script = '';
-
-      AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.error', [
-        'message' => 'L\'identifiant recherché ne correspond à aucune entrée de la base de donnée.'
-      ]);
-      exit;
-    }
 
     AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.involved', [
       'country' => $country,
