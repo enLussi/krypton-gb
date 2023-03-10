@@ -48,10 +48,10 @@
     ?>
       <div class="mission">
         <p class="code"><?= $mission->getName_code() ?></p>
-        <p class="status"><?= $parameters['missions_status'][$mission->getStatus()-1]['label'] ?></p>
+        <p class="status"><?= $mission->getStatus_label() ?></p>
         <div class="mission-body">
-          <p class="country"><span class="label">Pays concerné : </span><?= $parameters['missions_country'][$mission->getCountry()-1]['noun'] ?></p>
-          <p class="type"><span class="label">Type de mission : </span><?= $parameters['missions_types'][$mission->getType()-1]['spe_name'] ?></p>
+          <p class="country"><span class="label">Pays concerné : </span><?= $mission->getCountry_name() ?></p>
+          <p class="type"><span class="label">Type de mission : </span><?= $mission->getType_name() ?></p>
           <p class="description"><?= $mission->getDescription() ?></p>
         </div>
         <p class="link-mission"><a href="?mission=<?= $mission->getID() ?>">Voir la mission</a></p>

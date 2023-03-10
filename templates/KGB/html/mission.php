@@ -3,40 +3,60 @@
     require_once AdminNavigation::getInstance()->getAdminNavigation();
   ?>
 
-  <section>
-    <!-- Liste des Missions avec un champs de recherche -->
-  </section>
-  <section>
-    <h3 class="mb-5"></h3>
+  <section class="container my-3">
+    <h3 class="mb-5"><?= count($parameters['mission']) > 0 ? "Modifier la Mission" : "Créer une Mission" ?></h3>
     <form action="" method="post" id="mission-prepare">
       <input type="hidden" name="id" value="<?= count($parameters['mission']) > 0 ? $parameters['mission'][0]->getID() : "" ?>">
       <input type="hidden" name="modify" value="<?= count($parameters['mission']) > 0 ? true : false ?>">
-      <div class="mb-4 p-2 border border-1 rounded">
 
-        <!-- Titre de la mission -->
-        <div class="py-2 input-group">
-          <span class="input-group-text">Titre de la mission</span>
-          <input 
-            type="text" 
-            class="form-control" 
-            id="title-mission" 
-            name="title-mission" 
-            required 
-            value="<?= count($parameters['mission']) > 0 ? $parameters['mission'][0]->getTitle() : "" ?>"
-          >
+
+      <div class="mb-4 p-2 border border-1 rounded">
+        <div class="row">
+          <!-- Titre de la mission -->
+          <div class="py-2 input-group col">
+            <span class="input-group-text">Titre de la mission</span>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="title-mission" 
+              name="title-mission" 
+              required 
+              value="<?= count($parameters['mission']) > 0 ? $parameters['mission'][0]->getTitle() : "" ?>"
+            >
+          </div>
+          <!-- Nom de code de la mission -->
+          <div class="py-2 input-group col">
+            <span class="input-group-text">Nom de code</span>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="name_code" 
+              name="name_code" 
+              required 
+              value="<?= count($parameters['mission']) > 0 ? $parameters['mission'][0]->getName_code() : "" ?>"
+            >
+          </div>
+          <!-- Statut de la mission -->
+          <div class="py-2 col">
+            <select id="status" name="status" class="form-select" aria-label="" required>
+              <option value="" selected>Statut de la mission</option>
+              <?php 
+                foreach($parameters['status'] as $status) {
+                  ?>
+                  <option 
+                    <?= count($parameters['mission']) > 0 ? 
+                      ($parameters['mission'][0]->getStatus() == $status['row_id'] ? "selected" : "" ) 
+                    : "" ?>
+                    value="<?= $status['row_id']?>"
+                  ><?= $status['label'] ?></option>
+                  <?php
+                }
+              ?>
+            </select>
+          </div>
+
         </div>
-        <!-- Nom de code de la mission -->
-        <div class="py-2 input-group">
-          <span class="input-group-text">Nom de code</span>
-          <input 
-            type="text" 
-            class="form-control" 
-            id="name_code" 
-            name="name_code" 
-            required 
-            value="<?= count($parameters['mission']) > 0 ? $parameters['mission'][0]->getName_code() : "" ?>"
-          >
-        </div>
+
         <!-- Description de la mission -->
         <div class="py-2 input-group">
           <span class="input-group-text">Description de la mission</span>
@@ -44,206 +64,205 @@
             class="form-control" 
             id="description-mission" 
             name="description-mission" 
-            rows="2"
+            rows="5"
             required
           ><?= count($parameters['mission']) > 0 ? $parameters['mission'][0]->getDescription() : "" ?></textarea>
         </div>
-        <select id="status" name="status" class="form-select" aria-label="" required>
-          <option value="" selected>Statut de la mission</option>
-          <?php 
-            foreach($parameters['status'] as $status) {
-              ?>
-              <option 
-                <?= count($parameters['mission']) > 0 ? 
-                  ($parameters['mission'][0]->getStatus() == $status['row_id'] ? "selected" : "" ) 
-                : "" ?>
-                value="<?= $status['row_id']?>"
-              ><?= $status['label'] ?></option>
-              <?php
-            }
-          ?>
-        </select>
+
       </div>
 
 
-        <div class="mb-4 p-2 border border-1 rounded">
-          <select id="country" name="country" class="form-select" aria-label="" required>
-            <option value="" selected>Pays concerné</option>
-            <?php 
-              foreach($parameters['country'] as $country) {
-                ?>
-                <option 
-                  value="<?= $country['row_id']?>"
-                  <?= count($parameters['mission']) > 0 ? 
-                    ($parameters['mission'][0]->getCountry() == $country['row_id'] ? "selected" : "" ) 
-                  : "" ?>
-                ><?= $country['noun'] ?></option>
-                <?php
-              }
-            ?>
-          </select>
 
-          <div class="mb-4 p-2 border border-1 rounded">
+      <div class="mb-4 p-2 border border-1 rounded">
+        <div class="row">
+          <div class="mx-3 my-2 border border-1 rounded col">
             <h4>Sélectionner le type de mission</h4>
 
+            <?php 
+              foreach($parameters['type'] as $type) {
+                ?>
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="radio" name="type[]" 
+                    id="type-<?= $type['row_id']?>" 
+                    value="<?= $type['row_id']?>"
+                    <?= count($parameters['mission']) > 0 ? 
+                      ($parameters['mission'][0]->getType() == $type['row_id'] ? "checked" : "" ) 
+                    : "" ?>
+                  >
+                  <label class="form-check-label" for="type-<?= $type['row_id']?>">
+                    <?= $type['spe_name'] ?>
+                  </label>
+                </div>
+              <?php
+              }
+            ?>
+          </div>
+
+          <div class="col">
+            <div class="py-2">
+              <select id="country" name="country" class="form-select" aria-label="" required>
+                <option value="" selected>Pays concerné</option>
+                <?php 
+                  foreach($parameters['country'] as $country) {
+                    ?>
+                    <option 
+                      value="<?= $country['row_id']?>"
+                      <?= count($parameters['mission']) > 0 ? 
+                        ($parameters['mission'][0]->getCountry() == $country['row_id'] ? "selected" : "" ) 
+                      : "" ?>
+                    ><?= $country['noun'] ?></option>
+                    <?php
+                  }
+                ?>
+              </select>
+            </div>
+            <div class="p-1 my-2  border border-1 rounded">
+              <label for="start">Date de départ de la mission</label>
+              <input 
+                type="date" 
+                name="start" 
+                id="start" 
+                value="<?= count($parameters['mission']) > 0 ? $parameters['mission'][0]->getStart_date() : "" ?>"
+                required
+              >
+            </div>
+            <div class="p-1 my-2 border border-1 rounded">
+              <label for="start">Date de départ de la mission</label>
+              <input 
+                type="date" 
+                name="start" 
+                id="start" 
+                value="<?= count($parameters['mission']) > 0 ? $parameters['mission'][0]->getStart_date() : "" ?>"
+                required
+              >
+            </div>
+          </div>
+        </div>
+        
+        <div class="p-2 mx-2 my-2 border border-1 rounded" >
+          <h4>Sélectionner une ou plusieurs cibles</h4>
+            <div id="target" class="row row-cols-4">
               <?php 
-                foreach($parameters['type'] as $type) {
+
+                if(count($parameters['mission']) > 0){
+                  $targets_id = [];
+                  foreach($parameters['mission'][0]->getTargets() as $t) {
+                    $targets_id = [...$targets_id, $t->getID()];
+                  }
+                }
+                foreach($parameters['targets'] as $target) {
                   ?>
                   <div class="form-check">
                     <input 
-                      class="form-check-input" 
-                      type="radio" name="type[]" 
-                      id="type-<?= $type['row_id']?>" 
-                      value="<?= $type['row_id']?>"
+                      class="" 
+                      type="checkbox" 
+                      value="<?= $target->getID()?>" 
+                      id="target-<?= $target->getID()?>" 
+                      name="target[]"
                       <?= count($parameters['mission']) > 0 ? 
-                        ($parameters['mission'][0]->getType() == $type['row_id'] ? "checked" : "" ) 
+                        (in_array( $target->getID() ,$targets_id) ? "checked" : "" ) 
                       : "" ?>
                     >
-                    <label class="form-check-label" for="type-<?= $type['row_id']?>">
-                      <?= $type['spe_name'] ?>
+                    <label class="" for="target-<?=$target->getID()?>">
+                    <?= $target->getFirstname()." ".$target->getLastname() ." ( ". $target->getNationality() ." )"?>
                     </label>
                   </div>
-                <?php
+                  <?php
                 }
-              ?>
-          </div>
-
-          <div class="mb-4 p-2 border border-1 rounded" >
-            <h4>Sélectionner une ou plusieurs cibles</h4>
-            <div class="form-check" id="target">
-            <?php 
-
-              if(count($parameters['mission']) > 0){
-                $targets_id = [];
-                foreach($parameters['mission'][0]->getTargets() as $t) {
-                  $targets_id = [...$targets_id, $t->getID()];
-                }
-              }
-              foreach($parameters['targets'] as $target) {
                 ?>
-                  <input 
-                    class="" 
-                    type="checkbox" 
-                    value="<?= $target->getID()?>" 
-                    id="target-<?= $target->getID()?>" 
-                    name="target[]"
-                    <?= count($parameters['mission']) > 0 ? 
-                      (in_array( $target->getID() ,$targets_id) ? "checked" : "" ) 
-                    : "" ?>
-                  >
-                  <label class="" for="target-<?=$target->getID()?>">
-                  <?= $target->getFirstname()." ".$target->getLastname() ." ( ". $target->getNationality() ." )"?>
-                  </label>
-                <?php
-              }
-              ?>
             </div>
-          </div>
-
-          <div>
-            <label for="start">Date de départ de la mission</label>
-            <input 
-              type="date" 
-              name="start" 
-              id="start" 
-              value="<?= count($parameters['mission']) > 0 ? $parameters['mission'][0]->getStart_date() : "" ?>"
-              required
-            >
-          </div>
-
-          <div>
-            <label for="end">Date de fin de mission</label>
-            <input 
-              type="date" 
-              name="end" 
-              id="end" 
-              value="<?= count($parameters['mission']) > 0 ? $parameters['mission'][0]->getEnd_date() : "" ?>"
-              required
-            >
-          </div>
-
         </div>
+      </div>
     </form>
+
 
     <form action="" method="post" id="mission-involved">
       <div class="mb-4 p-2 border border-1 rounded">
-        <h4>Sélectionner un ou plusieurs agents</h4>
-        <div id="agent">
-          <?php 
-            if(count($parameters['mission']) > 0) {
-              $agents_id = [];
-              foreach($parameters['mission'][0]->getAgents() as $a) {
-                $agents_id = [...$agents_id, $a->getID()];
+        <div class="p-2 mx-2 my-2 border border-1 rounded">
+          <h4>Sélectionner un ou plusieurs agents</h4>
+          <div id="agent" class="px-4 row row-cols-4">
+            <?php 
+              if(count($parameters['mission']) > 0) {
+                $agents_id = [];
+                foreach($parameters['mission'][0]->getAgents() as $a) {
+                  $agents_id = [...$agents_id, $a->getID()];
+                }
               }
-            }
-            foreach($parameters['agents'] as $agent) { ?>
-            <div class="form-check">
-              <input 
-                class="form-check-input" 
-                type="checkbox" 
-                value="<?= $agent->getID() ?>" 
-                id="agent-<?= $agent->getID() ?>" 
-                name="agent[]"
-                <?= count($parameters['mission']) > 0 ? 
-                  (in_array($agent->getID(), $agents_id) ? "checked" : "" ) 
-                : "disabled" ?>
-              >
-            <label class="form-check-label" for="agent-<?= $agent->getId() ?>">
-              <?= $agent->getFirstname() ." ". $agent->getLastname() ." ". $agent->getNationality()  ?>
-            </label>
-          </div>
-          <?php } ?>
-        </div>
-      </div>
-
-      <div class="mb-4 p-2 border border-1 rounded">
-      <h4>Sélectionner un ou plusieurs contacts</h4>
-        <div id="contact" >
-        <?php 
-          if(count($parameters['mission']) > 0) {
-            $contacts_id = [];
-            foreach($parameters['mission'][0]->getContacts() as $c) {
-              $contacts_id = [...$contacts_id, $c->getID()];
-            }
-          }
-          foreach($parameters['contacts'] as $contact) { ?>
-            <div class="form-check">
-              <input 
-                class="form-check-input" 
-                type="checkbox" 
-                value="<?= $contact->getID() ?>" 
-                id="contact-<?= $contact->getID() ?>" 
-                name="contact[]"
-                <?= count($parameters['mission']) > 0 ? 
-                  (in_array($contact->getID(), $contacts_id) ? "checked" : "" ) 
-                : "disabled" ?>
+              foreach($parameters['agents'] as $agent) { ?>
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  value="<?= $agent->getID() ?>" 
+                  id="agent-<?= $agent->getID() ?>" 
+                  name="agent[]"
+                  <?= count($parameters['mission']) > 0 ? 
+                    (in_array($agent->getID(), $agents_id) ? "checked" : "" ) 
+                  : "disabled" ?>
                 >
-              <label class="form-check-label" for="contact-<?= $contact->getId() ?>">
-                <?= $contact->getFirstname() ." ". $contact->getLastname() ." ". $contact->getNationality()  ?>
-              </label>
-            </div>
-          <?php } ?>
+                <label class="form-check-label" for="agent-<?= $agent->getId() ?>">
+                  <?= $agent->getFirstname() ." ". $agent->getLastname() ." ". $agent->getNationality()  ?>
+                </label>
+              </div>
+            <?php } ?>
+          </div>
+        </div>        
+
+      </div>         
+      <div class="mb-4 p-2 border border-1 rounded">
+        <div class="p-2 mx-2 my-2 border border-1 rounded">
+          <h4>Sélectionner un ou plusieurs contacts</h4>
+          <div id="contact" class="px-4 row row-cols-4">
+            <?php 
+              if(count($parameters['mission']) > 0) {
+                $contacts_id = [];
+                foreach($parameters['mission'][0]->getContacts() as $c) {
+                  $contacts_id = [...$contacts_id, $c->getID()];
+                }
+              }
+              foreach($parameters['contacts'] as $contact) { ?>
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    value="<?= $contact->getID() ?>" 
+                    id="contact-<?= $contact->getID() ?>" 
+                    name="contact[]"
+                    <?= count($parameters['mission']) > 0 ? 
+                      (in_array($contact->getID(), $contacts_id) ? "checked" : "" ) 
+                    : "disabled" ?>
+                    >
+                  <label class="form-check-label" for="contact-<?= $contact->getId() ?>">
+                    <?= $contact->getFirstname() ." ". $contact->getLastname() ." ". $contact->getNationality()  ?>
+                  </label>
+                </div>
+              <?php } ?>
+          </div>
         </div>
       </div>
 
       <div class="mb-4 p-2 border border-1 rounded">
-      <h4>Sélectionner les Planques</h4>
-        <div id="hideout">
-        <?php foreach($parameters['hideouts'] as $hideout) { ?>
-          <div class="form-check">
-            <input 
-              class="form-check-input" 
-              type="checkbox" 
-              value="<?= $hideout->getID() ?>" 
-              id="hideout-<?= $hideout->getID() ?>" 
-              name="hideout[]"
-              disabled 
-              >
-            <label class="form-check-label" for="hideout-<?= $hideout->getID() ?>">
-            <?= $hideout->getType() ." ". $hideout->getCountry() ?>
-            </label>
+        <div class="p-2 mx-2 my-2 border border-1 rounded">
+          <h4>Sélectionner les Planques</h4>
+          <div id="hideout" class="px-4 row row-cols-4">
+            <?php foreach($parameters['hideouts'] as $hideout) { ?>
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  value="<?= $hideout->getID() ?>" 
+                  id="hideout-<?= $hideout->getID() ?>" 
+                  name="hideout[]"
+                  disabled 
+                  >
+                <label class="form-check-label" for="hideout-<?= $hideout->getID() ?>">
+                <?= $hideout->getType() ." ". $hideout->getCountry() ?>
+                </label>
+              </div>
+            <?php } ?>
           </div>
-          <?php } ?>
         </div>
       </div>
     </form>

@@ -81,36 +81,36 @@ async function searchInvolved(){
 
     Object.keys(agents).forEach(element => {
       involvedContainer.innerHTML += 
-      '<div class="list">'+
-      '<p>'+agents[element].name_code+'</p>'+
-      '<p>'+agents[element].firstname+' '+agents[element].lastname+'</p>'+
-      '<p>('+agents[element].specialities.join(', ')+')</p>'+
-      '<p>'+agents[element].nationality+'</p>'+
+      '<tr>'+
+      '<td>'+agents[element].name_code+'</td>'+
+      '<td>'+agents[element].firstname+' '+agents[element].lastname+'</td>'+
+      '<td>('+agents[element].specialities.join(', ')+')</td>'+
+      '<td>'+agents[element].nationality+'</td>'+
       '<a role="button" href="/admin/kgb-involved?agent='+agents[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
-      '<button id="involved-'+agents[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button>'+
+      '<button id="involved-'+agents[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button></td>'+
       '</div>';
     });
 
     Object.keys(contacts).forEach(element => {
       involvedContainer.innerHTML += 
-      '<div class="list">'+
-      '<p>'+contacts[element].name_code+'</p>'+
-      '<p>'+contacts[element].firstname+' '+contacts[element].lastname+'</p>'+
-      '<p>'+contacts[element].nationality+'</p>'+
-      '<a role="button" href="/admin/kgb-involved?contact='+contacts[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
-      '<button id="involved-'+contacts[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button>'+
+      '<tr>'+
+      '<td>'+contacts[element].name_code+'</td>'+
+      '<td>'+contacts[element].firstname+' '+contacts[element].lastname+'</td>'+
+      '<td>'+contacts[element].nationality+'</td>'+
+      '<td><a role="button" href="/admin/kgb-involved?contact='+contacts[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
+      '<button id="involved-'+contacts[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button></td>'+
       '</div>';
     });
 
     Object.keys(targets).forEach(element => {
       involvedContainer.innerHTML += 
-      '<div class="list">'+
-      '<p>'+targets[element].name_code+'</p>'+
-      '<p>'+targets[element].firstname+' '+targets[element].lastname+'</p>'+
-      '<p>'+targets[element].nationality+'</p>'+
-      '<a role="button" href="/admin/kgb-involved?target='+targets[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
-      '<button id="involved-'+targets[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button>'+
-      '</div>';
+      '<tr>'+
+      '<td>'+targets[element].name_code+'</td>'+
+      '<td>'+targets[element].firstname+' '+targets[element].lastname+'</td>'+
+      '<td>'+targets[element].nationality+'</td>'+
+      '<td><a role="button" href="/admin/kgb-involved?target='+targets[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
+      '<button id="involved-'+targets[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button></td>'+
+      '</tr>';
     });
 
     return;
@@ -134,13 +134,13 @@ async function searchMission(){
 
     Object.keys(missions).forEach(element => {
       missionContainer.innerHTML += 
-      '<div class="list">'+
-      '<p>'+missions[element].name_code+'</p>'+
-      '<p>'+missions[element].status+'</p>'+
-      '<p>('+missions[element].country+')</p>'+
-      '<a role="button" href="/admin/kgb-mission?mission='+missions[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
-      '<button id="mission-'+missions[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button>'+
-      '</div>';
+      '<tr>'+
+      '<td>'+missions[element].name_code+'</td>'+
+      '<td>'+missions[element].status+'</td>'+
+      '<td>('+missions[element].country+')</td>'+
+      '<td><a role="button" href="/admin/kgb-mission?mission='+missions[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
+      '<button id="mission-'+missions[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button></td>'+
+      '</tr>';
     });
 
     return;
@@ -164,14 +164,14 @@ async function searchHideout(){
 
     Object.keys(hideouts).forEach(element => {
       hideoutContainer.innerHTML += 
-      '<div class="list">'+
-      '<p>'+hideouts[element].name_code+'</p>'+
-      '<p>'+hideouts[element].address+'</p>'+
-      '<p>('+hideouts[element].country+')</p>'+
-      '<p>('+hideouts[element].type+')</p>'+
-      '<a role="button" href="/admin/kgb-hideout?hideout='+hideouts[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
-      '<button id="hideout-'+hideouts[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button>'+
-      '</div>';
+      '<tr>'+
+      '<td>'+hideouts[element].name_code+'</td>'+
+      '<td>'+hideouts[element].address+'</td>'+
+      '<td>('+hideouts[element].country+')</td>'+
+      '<td>('+hideouts[element].type+')</td>'+
+      '<td><a role="button" href="/admin/kgb-hideout?hideout='+hideouts[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
+      '<button id="hideout-'+hideouts[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button></td>'+
+      '</tr>';
     });
 
     return;
