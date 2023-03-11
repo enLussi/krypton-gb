@@ -148,15 +148,20 @@ class DatabaseRequest
 
   public function requestSpecific(string $command) {
     
-    $pdo = $this->get_PDO();
 
-    if ($pdo) {
+    try {
+      $pdo = $this->get_PDO();
 
-      $query = $pdo->query($command, PDO::FETCH_ASSOC);
-      $result = $query->fetchAll();
+      if ($pdo) {
 
-      return $result;
+        $query = $pdo->query($command, PDO::FETCH_ASSOC);
+        $result = $query->fetchAll();
 
+        return $result;
+
+      }
+    } catch (Exception $e) {
+      AgoraController::getInstance()->issue_redirect(102);
     }
 
   }
