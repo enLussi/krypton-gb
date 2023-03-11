@@ -67,23 +67,21 @@ header {
   border-radius: 0;
   border: none;
   border-bottom: 1px solid black;
-  width: 335px;
-
-  font-size: 14px;
-  padding: 5px;
-}
-
-select, input {
+  width: 300px;
 
   background-color: transparent;
 
+  font-size: 14px;
+  padding: 5px;
 }
 
 .sorting {
 
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   column-gap: 10px;
+  row-gap: 10px;
   padding: 10px 0;
 }
 

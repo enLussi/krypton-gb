@@ -38,7 +38,16 @@
       </div>
       <div id="involved" class="card card-body my-2">
         <h3>Liste des Agents/Contacts/Cibles</h3>
-        <input class="w-50" type="search" name="search-involved" id="search-involved" placeholder="Entrez le nom de code, le prénom ou le nom de la personne">
+        <div class="row">
+          <input class="col-5" type="search" name="search-involved" id="search-involved" placeholder="Entrez le nom de code, le prénom ou le nom de la personne">
+          <select id="involved-select" name="involved-select" class="col-3" aria-label="" required>
+            <option value="0" selected>Sélectionner un type de Personne</option>
+            <option value="1" >Agents</option>
+            <option value="2" >Contacts</option>
+            <option value="3" >Cibles</option>
+          </select>
+        </div>
+
         <div >
           <table class="table table-striped">
             <thead>

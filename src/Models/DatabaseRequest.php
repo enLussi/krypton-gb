@@ -96,6 +96,8 @@ class DatabaseRequest
    * @var $table to search in table specified
    * @var $id after where clause
    * @var $ref to compare with
+   * 
+   * deprecated
    */
   public function requireFromDataBase(array $array, string $table, string $id, string $ref){
 

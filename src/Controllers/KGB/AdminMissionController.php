@@ -111,10 +111,6 @@ class AdminMissionController extends AdminPageController
 
     }
 
-
-    
-    
-
     AgoraController::getInstance()->render($this->viewPath, $this->template, 'KGB.html.mission', [
       "country" => $country,
       "type" => $type,

@@ -43,7 +43,7 @@
         <div class="col-6">
           <div class="input-group mb-3">
             <select id="country" name="country" class="form-select" aria-label="" required>
-              <option value="" selected>Nationalité</option>
+              <option value="" selected>Pays</option>
               <?php 
                 foreach($parameters['country'] as $country) {
                   ?>

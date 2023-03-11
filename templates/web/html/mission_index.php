@@ -50,7 +50,7 @@
         <p><span class="label" >Planque :</span></p>
         <ul>
           <?php foreach($parameters['mission']->getHideouts() as $hideout) {
-            echo "<li>".$hideout->getName_code()." ".$hideout->getAddress()." (".$hideout->getType().")</li>";
+            echo '<li class="typed">'.$hideout->getName_code()." ".$hideout->getAddress()." (".$hideout->getType().")</li>";
           } ?>
         </ul>
       </div>

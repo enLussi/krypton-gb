@@ -2,6 +2,7 @@ const remove = document.querySelectorAll('.remove');
 
 const searchInputInvolved = document.getElementById('search-involved');
 const involvedContainer = document.getElementById('involved-result');
+const involvedSelect = document.getElementById('involved-select');
 
 const searchInputMission = document.getElementById('search-mission');
 const missionContainer = document.getElementById('mission-result');
@@ -56,6 +57,10 @@ searchInputInvolved.oninput = () => {
   searchInvolved();
 }
 
+involvedSelect.onchange = () => {
+  searchInvolved();
+}
+
 searchInputMission.oninput = () => {
   searchMission();
 }
@@ -79,39 +84,46 @@ async function searchInvolved(){
     involvedContainer.innerHTML = ""
     const { agents, contacts, targets } = JSON.parse(t);
 
-    Object.keys(agents).forEach(element => {
-      involvedContainer.innerHTML += 
-      '<tr>'+
-      '<td>'+agents[element].name_code+'</td>'+
-      '<td>'+agents[element].firstname+' '+agents[element].lastname+'</td>'+
-      '<td>('+agents[element].specialities.join(', ')+')</td>'+
-      '<td>'+agents[element].nationality+'</td>'+
-      '<a role="button" href="/admin/kgb-involved?agent='+agents[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
-      '<button id="involved-'+agents[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button></td>'+
-      '</div>';
-    });
+    if(involvedSelect.value == 0 || involvedSelect.value == 1) {
+      Object.keys(agents).forEach(element => {
+        involvedContainer.innerHTML += 
+        '<tr>'+
+        '<td>'+agents[element].name_code+'</td>'+
+        '<td>'+agents[element].firstname+' '+agents[element].lastname+'</td>'+
+        '<td>('+agents[element].specialities.join(', ')+')</td>'+
+        '<td>'+agents[element].nationality+'</td>'+
+        '<td><a role="button" href="/admin/kgb-involved?agent='+agents[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
+        '<button id="involved-'+agents[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button></td>'+
+        '</tr>';
+      });
+    }
+    if(involvedSelect.value == 0 || involvedSelect.value == 2) {
+      Object.keys(contacts).forEach(element => {
+        involvedContainer.innerHTML += 
+        '<tr>'+
+        '<td>'+contacts[element].name_code+'</td>'+
+        '<td>'+contacts[element].firstname+' '+contacts[element].lastname+'</td>'+
+        '<td>'+contacts[element].nationality+'</td>'+
+        '<td></td>'+
+        '<td><a role="button" href="/admin/kgb-involved?contact='+contacts[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
+        '<button id="involved-'+contacts[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button></td>'+
+        '</tr>';
+      });
+    }
 
-    Object.keys(contacts).forEach(element => {
-      involvedContainer.innerHTML += 
-      '<tr>'+
-      '<td>'+contacts[element].name_code+'</td>'+
-      '<td>'+contacts[element].firstname+' '+contacts[element].lastname+'</td>'+
-      '<td>'+contacts[element].nationality+'</td>'+
-      '<td><a role="button" href="/admin/kgb-involved?contact='+contacts[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
-      '<button id="involved-'+contacts[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button></td>'+
-      '</div>';
-    });
-
-    Object.keys(targets).forEach(element => {
-      involvedContainer.innerHTML += 
-      '<tr>'+
-      '<td>'+targets[element].name_code+'</td>'+
-      '<td>'+targets[element].firstname+' '+targets[element].lastname+'</td>'+
-      '<td>'+targets[element].nationality+'</td>'+
-      '<td><a role="button" href="/admin/kgb-involved?target='+targets[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
-      '<button id="involved-'+targets[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button></td>'+
-      '</tr>';
-    });
+    if(involvedSelect.value == 0 || involvedSelect.value == 3) {
+      Object.keys(targets).forEach(element => {
+        involvedContainer.innerHTML += 
+        '<tr>'+
+        '<td>'+targets[element].name_code+'</td>'+
+        '<td>'+targets[element].firstname+' '+targets[element].lastname+'</td>'+
+        '<td>'+targets[element].nationality+'</td>'+
+        '<td></td>'+
+        '<td><a role="button" href="/admin/kgb-involved?target='+targets[element].id+'" class="btn btn-primary btn-sm">Modify</a>'+
+        '<button id="involved-'+targets[element].id+'" type="button" class="btn btn-danger btn-sm remove">Remove</button></td>'+
+        '</tr>';
+      });
+    }
 
     return;
   });

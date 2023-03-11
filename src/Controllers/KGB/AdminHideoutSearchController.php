@@ -5,6 +5,7 @@ namespace App\Controllers;
 use APP\Entity\Hideout;
 use Core\Controllers\AgoraController;
 use Core\Models\DatabaseRequest;
+use Exception;
 
 class AdminHideoutSearchController extends AdminPageController
 {
@@ -18,6 +19,19 @@ class AdminHideoutSearchController extends AdminPageController
   }
 
   public function index() {
+
+    if(isset($_POST['search'])){
+      try {
+        $this->search();
+      } catch (Exception $e) {
+        AgoraController::getInstance()->issue_redirect(205);
+      }
+    } else {
+      AgoraController::getInstance()->issue_redirect(204);
+    }
+  }
+
+  private function search() {
     header("Content-Type: application/json");
 
     $dbrequest = new DatabaseRequest($_SERVER['runtime']->getSettings()->getDBConfig());
@@ -35,6 +49,5 @@ class AdminHideoutSearchController extends AdminPageController
       'hideouts' => $hideouts, 
     ]);
     DatabaseRequest::close($dbrequest);
-    exit;
   }
 }

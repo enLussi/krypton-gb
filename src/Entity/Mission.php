@@ -113,7 +113,7 @@ class Mission {
       );
       $hideout_array = [];
       foreach($hideouts as $hideout) {
-        $hideout_array = [...$hideout_array, Hideout::hideoutByID($hideout['row_id'])];
+        $hideout_array = [...$hideout_array, Hideout::hideoutByID($hideout['hideout_id'])];
       }
 
       $instance = new self(
@@ -126,9 +126,9 @@ class Mission {
         $agent_array,
         $contact_array,
         $target_array,
-        $mission[0]['sid'],
-        $mission[0]['spe_name'],
         $mission[0]['hid'],
+        $mission[0]['spe_name'],
+        $mission[0]['sid'],
         $mission[0]['m_status'],
         $hideout_array,
         $mission[0]['start_date'],

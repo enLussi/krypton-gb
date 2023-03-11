@@ -4,9 +4,13 @@ namespace App\Controllers;
 
 use Core\Controllers\AgoraController;
 use Core\Models\DatabaseRequest;
+use Exception;
 
 class AdminMissionModifyController extends AdminPageController
 {
+
+  private $post;
+
   public function __construct(){
     parent::__construct();
 
@@ -20,113 +24,157 @@ class AdminMissionModifyController extends AdminPageController
 
   public function index() {
 
-    $dbrequest = new DatabaseRequest($_SERVER['runtime']->getSettings()->getDBConfig());
     
-    $post = $_POST;
-    var_dump($post);
-    if(isset($_POST['modify']) && intval($_POST['modify'])) {
-      $dbrequest->requestSpecific(
-        "UPDATE mission SET title = '".$post['title-mission']."', descript='".addslashes($post['description-mission'])."', 
-        name_code ='".$post['name_code']."', mission_status_id = ".intval($post['status']).", 
-        start_date = '".$post['start']."', end_date = '".$post['end']."', mission_type_id = ".intval($post['type'][0]).", 
-        country_id = ".intval($post['country'])." WHERE row_id = ".intval($post['id'])
-      );
-      $dbrequest->requestSpecific(
-        "DELETE FROM assoc_mission_person WHERE mission_id=".$post['id']
-      );
-      $dbrequest->requestSpecific(
-        "DELETE FROM assoc_mission_hideout WHERE mission_id=".$post['id']
-      );
+    
+    if(isset($_POST) && count($_POST) > 0){
 
-      foreach($post['agent'] as $involved) {
-        $dbrequest->requestProcedure('assign_to_mission', [
-          $involved,
-          intval($post['id'])
-        ]);
-      }
-      
-      foreach($post['contact'] as $involved) {
-        $dbrequest->requestProcedure('assign_to_mission', [
-          $involved,
-          intval($post['id'])
-        ]);
-      }
-      foreach($post['target'] as $involved) {
-        $dbrequest->requestProcedure('assign_to_mission', [
-          $involved,
-          intval($post['id'])
-        ]);
-      }
+      $this->post = $_POST;
 
-      if(isset($post['hideout'])) {
-        foreach($post['hideout'] as $hideout) {
-          $dbrequest->requestProcedure('hideout_to_mission', [
-            $hideout,
-            intval($post['id'])
-          ]);
+      if(isset($this->post['modify']) && intval($this->post['modify'])) {
+
+        try {
+          $this->modify();
+        } catch (Exception $e) {
+          AgoraController::getInstance()->issue_redirect(201);
         }
+
+      } elseif(isset($_POST['remove']) && $_POST['remove'] == true) {
+        
+        try {
+          $this->remove();
+        } catch (Exception $e) {
+          AgoraController::getInstance()->issue_redirect(202);
+        }
+  
+  
+      } else {
+  
+        try {
+          $this->create();
+        } catch (Exception $e) {
+          AgoraController::getInstance()->issue_redirect(203);
+        }
+  
       }
-
-    } elseif(isset($_POST['remove']) && $_POST['remove'] == true) {
-      
-      $dbrequest->requestSpecific(
-        "DELETE FROM assoc_mission_person WHERE mission_id=".$post['id']
-      );
-      $dbrequest->requestSpecific(
-        "DELETE FROM assoc_mission_hideout WHERE mission_id=".$post['id']
-      );
-      $dbrequest->requestSpecific(
-        "DELETE FROM mission WHERE row_id = ".intval($post['id'])
-      );
-
 
     } else {
 
-      $mission_id = $dbrequest->requestProcedure('new_mission', [
-        "'".$post['title-mission']."'", 
-        "'".$post['description-mission']."'", 
-        "'".$post['name_code']."'", 
-        intval($post['country']), 
-        intval($post['type'][0]), 
-        "'".$post['start']."'", 
-        "'".$post['end']."'",
-        intval($post['status']),
-      ]);
-  
-      foreach($post['agent'] as $involved) {
-        $dbrequest->requestProcedure('assign_to_mission', [
-          $involved,
-          $mission_id[0]['id']
-        ]);
-      }
-      
-      foreach($post['contact'] as $involved) {
-        $dbrequest->requestProcedure('assign_to_mission', [
-          $involved,
-          $mission_id[0]['id']
-        ]);
-      }
-      foreach($post['target'] as $involved) {
-        $dbrequest->requestProcedure('assign_to_mission', [
-          $involved,
-          $mission_id[0]['id']
-        ]);
-      }
-
-      if(isset($post['hideout'])) {
-        foreach($post['hideout'] as $hideout) {
-          $dbrequest->requestProcedure('hideout_to_mission', [
-            $hideout,
-            $mission_id[0]['id']
-          ]);
-        }
-      }
+      AgoraController::getInstance()->issue_redirect(204);
 
     }
 
+
+    exit;
+  }
+
+
+  private function modify() {
+
+    $dbrequest = new DatabaseRequest($_SERVER['runtime']->getSettings()->getDBConfig());
+
+    $dbrequest->requestSpecific(
+      "UPDATE mission SET title = '".addslashes($this->post['title-mission'])."', descript='".addslashes($this->post['description-mission'])."', 
+      name_code ='".addslashes($this->post['name_code'])."', mission_status_id = ".intval($this->post['status']).", 
+      start_date = '".$this->post['start']."', end_date = '".$this->post['end']."', mission_type_id = ".intval($this->post['type'][0]).", 
+      country_id = ".intval($this->post['country'])." WHERE row_id = ".intval($this->post['id'])
+    );
+    $dbrequest->requestSpecific(
+      "DELETE FROM assoc_mission_person WHERE mission_id=".$this->post['id']
+    );
+    $dbrequest->requestSpecific(
+      "DELETE FROM assoc_mission_hideout WHERE mission_id=".$this->post['id']
+    );
+
+    foreach($this->post['agent'] as $involved) {
+      $dbrequest->requestProcedure('assign_to_mission', [
+        $involved,
+        intval($this->post['id'])
+      ]);
+    }
     
+    foreach($this->post['contact'] as $involved) {
+      $dbrequest->requestProcedure('assign_to_mission', [
+        $involved,
+        intval($this->post['id'])
+      ]);
+    }
+    foreach($this->post['target'] as $involved) {
+      $dbrequest->requestProcedure('assign_to_mission', [
+        $involved,
+        intval($this->post['id'])
+      ]);
+    }
+
+    if(isset($this->post['hideout'])) {
+      foreach($this->post['hideout'] as $hideout) {
+        $dbrequest->requestProcedure('hideout_to_mission', [
+          $hideout,
+          intval($this->post['id'])
+        ]);
+      }
+    }
 
     DatabaseRequest::close($dbrequest);
-    exit;
+  }
+
+  private function remove() {
+    $dbrequest = new DatabaseRequest($_SERVER['runtime']->getSettings()->getDBConfig());
+
+    $dbrequest->requestSpecific(
+      "DELETE FROM assoc_mission_person WHERE mission_id=".$this->post['id']
+    );
+    $dbrequest->requestSpecific(
+      "DELETE FROM assoc_mission_hideout WHERE mission_id=".$this->post['id']
+    );
+    $dbrequest->requestSpecific(
+      "DELETE FROM mission WHERE row_id = ".intval($this->post['id'])
+    );
+
+    DatabaseRequest::close($dbrequest);
+  }
+
+  private function create() {
+    $dbrequest = new DatabaseRequest($_SERVER['runtime']->getSettings()->getDBConfig());
+
+    $mission_id = $dbrequest->requestProcedure('new_mission', [
+      "'".addslashes($this->post['title-mission'])."'", 
+      "'".addslashes($this->post['description-mission'])."'", 
+      "'".addslashes($this->post['name_code'])."'", 
+      intval($this->post['country']), 
+      intval($this->post['type'][0]), 
+      "'".$this->post['start']."'", 
+      "'".$this->post['end']."'",
+      intval($this->post['status']),
+    ]);
+
+    foreach($this->post['agent'] as $involved) {
+      $dbrequest->requestProcedure('assign_to_mission', [
+        $involved,
+        $mission_id[0]['id']
+      ]);
+    }
+    
+    foreach($this->post['contact'] as $involved) {
+      $dbrequest->requestProcedure('assign_to_mission', [
+        $involved,
+        $mission_id[0]['id']
+      ]);
+    }
+    foreach($this->post['target'] as $involved) {
+      $dbrequest->requestProcedure('assign_to_mission', [
+        $involved,
+        $mission_id[0]['id']
+      ]);
+    }
+
+    if(isset($this->post['hideout'])) {
+      foreach($this->post['hideout'] as $hideout) {
+        $dbrequest->requestProcedure('hideout_to_mission', [
+          $hideout,
+          $mission_id[0]['id']
+        ]);
+      }
+    }
+    DatabaseRequest::close($dbrequest);
   }
 }

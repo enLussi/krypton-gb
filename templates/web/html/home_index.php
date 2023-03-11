@@ -52,7 +52,7 @@
         <div class="mission-body">
           <p class="country"><span class="label">Pays concerné : </span><?= $mission->getCountry_name() ?></p>
           <p class="type"><span class="label">Type de mission : </span><?= $mission->getType_name() ?></p>
-          <p class="description"><?= $mission->getDescription() ?></p>
+          <p class="description"><?= $mission->getTitle() ?></p>
         </div>
         <p class="link-mission"><a href="?mission=<?= $mission->getID() ?>">Voir la mission</a></p>
       </div>

@@ -7,6 +7,7 @@ use APP\Entity\Contact;
 use APP\Entity\Target;
 use Core\Controllers\AgoraController;
 use Core\Models\DatabaseRequest;
+use Exception;
 
 class AdminInvolvedSearchController extends AdminPageController
 {
@@ -20,6 +21,20 @@ class AdminInvolvedSearchController extends AdminPageController
   }
 
   public function index() {
+
+    if(isset($_POST['search'])){
+      try {
+        $this->search();
+      } catch (Exception $e) {
+        AgoraController::getInstance()->issue_redirect(205);
+      }
+    } else {
+      AgoraController::getInstance()->issue_redirect(204);
+    }
+    
+  }
+
+  private function search () {
 
     header("Content-Type: application/json");
 
@@ -57,8 +72,8 @@ class AdminInvolvedSearchController extends AdminPageController
       'contacts' => $contacts, 
       'targets' => $targets
     ]);
+  
 
     DatabaseRequest::close($dbrequest);
-    
   }
 }

@@ -129,12 +129,12 @@
               >
             </div>
             <div class="p-1 my-2 border border-1 rounded">
-              <label for="start">Date de départ de la mission</label>
+              <label for="start">Date de fin de  mission</label>
               <input 
                 type="date" 
-                name="start" 
-                id="start" 
-                value="<?= count($parameters['mission']) > 0 ? $parameters['mission'][0]->getStart_date() : "" ?>"
+                name="end" 
+                id="end" 
+                value="<?= count($parameters['mission']) > 0 ? $parameters['mission'][0]->getEnd_date() : "" ?>"
                 required
               >
             </div>
@@ -247,7 +247,14 @@
         <div class="p-2 mx-2 my-2 border border-1 rounded">
           <h4>Sélectionner les Planques</h4>
           <div id="hideout" class="px-4 row row-cols-4">
-            <?php foreach($parameters['hideouts'] as $hideout) { ?>
+            <?php 
+              if(isset($parameters['hideout-selected'])) {
+                $hideouts_id = [];
+                foreach($parameters['hideout-selected'] as $h) {
+                  $hideouts_id = [...$hideouts_id, $h['hideout_id']];
+                }
+              }
+              foreach($parameters['hideouts'] as $hideout) { ?>
               <div class="form-check">
                 <input 
                   class="form-check-input" 
@@ -255,7 +262,9 @@
                   value="<?= $hideout->getID() ?>" 
                   id="hideout-<?= $hideout->getID() ?>" 
                   name="hideout[]"
-                  disabled 
+                  <?= isset($parameters['hideout-selected']) ? 
+                    (in_array($hideout->getID(), $hideouts_id) ? "checked" : "" ) 
+                  : "disabled" ?>
                   >
                 <label class="form-check-label" for="hideout-<?= $hideout->getID() ?>">
                 <?= $hideout->getType() ." ". $hideout->getCountry() ?>
