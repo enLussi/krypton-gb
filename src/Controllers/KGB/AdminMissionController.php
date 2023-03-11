@@ -44,7 +44,7 @@ class AdminMissionController extends AdminPageController
     $targets= [];
     foreach(
       $dbrequest->requestSpecific
-      ("SELECT row_id FROM person INNER JOIN (SELECT target_id FROM kgb.target) AS a ON row_id = a.target_id") as $t) 
+      ("SELECT row_id FROM person INNER JOIN (SELECT target_id FROM target) AS a ON row_id = a.target_id") as $t) 
     {
       $targets = [...$targets, Target::targetByID($t['row_id'])];
     }

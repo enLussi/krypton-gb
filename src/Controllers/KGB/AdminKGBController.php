@@ -32,7 +32,7 @@ class AdminKGBController extends AdminPageController
       $targets= [];
       foreach(
         $dbrequest->requestSpecific
-        ("SELECT target_id AS row_id FROM kgb.target") as $t) 
+        ("SELECT target_id AS row_id FROM target") as $t) 
       {
         $targets = [...$targets, Target::targetByID($t['row_id'])];
       }

@@ -43,7 +43,7 @@ class AdminInvolvedSearchController extends AdminPageController
     $targets= [];
     foreach(
       $dbrequest->requestSpecific
-      ("SELECT row_id FROM person INNER JOIN (SELECT * FROM kgb.target) AS a ON row_id = a.target_id 
+      ("SELECT row_id FROM person INNER JOIN (SELECT * FROM target) AS a ON row_id = a.target_id 
       WHERE (name_code LIKE '".$_POST['search']."%') OR firstname LIKE '".$_POST['search']."%' OR lastname LIKE '".$_POST['search']."%'") as $t) 
     {
       $targets = [...$targets, Target::targetByID($t['row_id'])->jsonSerialize()];

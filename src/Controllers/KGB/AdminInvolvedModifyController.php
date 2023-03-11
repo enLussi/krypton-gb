@@ -86,7 +86,7 @@ class AdminInvolvedModifyController extends AdminPageController
     }
     if(count($dbrequest->requestSpecific("SELECT * FROM target WHERE target_id =".$this->post['id'])) > 0) {
       $dbrequest->requestSpecific(
-        "DELETE FROM kgb.target WHERE target_id =".$this->post['id']
+        "DELETE FROM target WHERE target_id =".$this->post['id']
       );
     }
 
