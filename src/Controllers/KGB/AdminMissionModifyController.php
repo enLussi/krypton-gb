@@ -113,7 +113,7 @@ class AdminMissionModifyController extends AdminPageController
         ]);
       }
     }
-
+    AgoraController::getInstance()->getEventDispatcher()->dispatch('modify', ['mission', intval($this->post['id'])]);
     DatabaseRequest::close($dbrequest);
   }
 
@@ -129,7 +129,7 @@ class AdminMissionModifyController extends AdminPageController
     $dbrequest->requestSpecific(
       "DELETE FROM mission WHERE row_id = ".intval($this->post['id'])
     );
-
+    AgoraController::getInstance()->getEventDispatcher()->dispatch('remove', ['mission', intval($this->post['id'])]);
     DatabaseRequest::close($dbrequest);
   }
 
@@ -175,6 +175,7 @@ class AdminMissionModifyController extends AdminPageController
         ]);
       }
     }
+    AgoraController::getInstance()->getEventDispatcher()->dispatch('create', ['mission', intval($mission_id[0]['id'])]);
     DatabaseRequest::close($dbrequest);
   }
 }

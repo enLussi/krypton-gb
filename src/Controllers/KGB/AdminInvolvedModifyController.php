@@ -109,6 +109,7 @@ class AdminInvolvedModifyController extends AdminPageController
       default:
         break;
     }
+    AgoraController::getInstance()->getEventDispatcher()->dispatch('modify', ['involved', intval($this->post['id'])]);
     DatabaseRequest::close($dbrequest);
   }
 
@@ -138,6 +139,7 @@ class AdminInvolvedModifyController extends AdminPageController
     }
 
     $dbrequest->requestSpecific("DELETE FROM person WHERE row_id = ".$this->post['id']);
+    AgoraController::getInstance()->getEventDispatcher()->dispatch('remove', ['involved', intval($this->post['id'])]);
     DatabaseRequest::close($dbrequest);
   }
 
@@ -145,7 +147,7 @@ class AdminInvolvedModifyController extends AdminPageController
     $dbrequest = new DatabaseRequest($_SERVER['runtime']->getSettings()->getDBConfig());
     switch($_POST['involved']) {
       case "1":
-        $agent = $dbrequest->requestProcedure('new_agent', [
+        $involved = $dbrequest->requestProcedure('new_agent', [
           "'".addslashes($this->post['lastname'])."'",
           "'".addslashes($this->post['firstname'])."'",
           "'".$this->post['birthdate']."'",
@@ -154,13 +156,13 @@ class AdminInvolvedModifyController extends AdminPageController
         ]);
         foreach($this->post['type'] as $type) {
           $dbrequest->requestProcedure(('assign_spe_to_agent'), [
-            $agent[0]['out_param'],
+            $involved[0]['out_param'],
             intval($type)
           ]);
         }
         break;
       case "2":
-        $dbrequest->requestProcedure('new_contact', [
+        $involved = $dbrequest->requestProcedure('new_contact', [
           $this->post['lastname'],
           $this->post['firstname'],
           $this->post['birthdate'],
@@ -169,7 +171,7 @@ class AdminInvolvedModifyController extends AdminPageController
         ]);
         break;
       case "3":
-        $dbrequest->requestProcedure('new_target', [
+        $involved = $dbrequest->requestProcedure('new_target', [
           $this->post['lastname'],
           $this->post['firstname'],
           $this->post['birthdate'],
@@ -180,6 +182,7 @@ class AdminInvolvedModifyController extends AdminPageController
       default:
         break;
     }
+    AgoraController::getInstance()->getEventDispatcher()->dispatch('create', ['involved', intval($involved[0]['out_param'])]);
     DatabaseRequest::close($dbrequest);
   }
 }

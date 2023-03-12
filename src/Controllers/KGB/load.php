@@ -1,5 +1,12 @@
 <?php
 
+use Core\Event\KGBListener;
+
+$this->event->addListener('modify', 'Event_modify', new KGBListener);
+$this->event->addListener('remove', 'Event_remove', new KGBListener);
+$this->event->addListener('create', 'Event_create', new KGBListener);
+
+
 $this->addRoutes([
   "kgb"=> [
     "path"=> "/admin/kgb",

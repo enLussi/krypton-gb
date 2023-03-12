@@ -73,6 +73,7 @@ class AdminHideoutModifyController extends AdminPageController
         country_id = ".intval($this->post['country'])."
     WHERE row_id = ".intval($this->post['id']));
 
+    AgoraController::getInstance()->getEventDispatcher()->dispatch('modify', ['hideout', intval($this->post['id'])]);
     DatabaseRequest::close($dbrequest);
   }
 
@@ -83,17 +84,21 @@ class AdminHideoutModifyController extends AdminPageController
     );
 
     $dbrequest->requestSpecific("DELETE FROM hideout WHERE row_id = ".$this->post['id']);
+
+    AgoraController::getInstance()->getEventDispatcher()->dispatch('remove', ['hideout', intval($this->post['id'])]);
     DatabaseRequest::close($dbrequest);
   }
 
   private function create() {
     $dbrequest = new DatabaseRequest($_SERVER['runtime']->getSettings()->getDBConfig());
-    $dbrequest->requestProcedure('new_hideout', [
+    $hideout = $dbrequest->requestProcedure('new_hideout', [
       "'".addslashes($this->post['name_code'])."'",
       "'".addslashes($this->post['address'])."'",
       intval($this->post['hideout-type']),
       intval($this->post['country'])
     ]);
+
+    AgoraController::getInstance()->getEventDispatcher()->dispatch('create', ['hideout', intval($hideout[0]['out_param'])]);
     DatabaseRequest::close($dbrequest);
   }
 }
