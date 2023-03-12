@@ -19,6 +19,14 @@
       <p><span class="label">Titre : </span><span class="typed"><?= $parameters['mission']->getTitle() ?></span></p>
       <p><span class="label">Type de Mission : </span><span class="typed"><?= $parameters['mission']->getType_name() ?></span></p>
       <p><span class="label">Statut de la Mission : </span><span class="typed"><?= $parameters['mission']->getStatus_label() ?></span></p>
+      <p><span class="label">Début de la Mission : </span><span class="typed"><?php
+        $date = new DateTime($parameters['mission']->getStart_date());
+        echo $date->format('d F Y');
+        ?></span></p>
+      <p><span class="label">Fin de la Mission : </span><span class="typed"><?php 
+        $date = new DateTime($parameters['mission']->getEnd_date());
+        echo $date->format('d F Y');
+      ?></span></p>
     </div>
     <div class="agents list">
       <p><span class="label" >Agents associés :</span></p>
