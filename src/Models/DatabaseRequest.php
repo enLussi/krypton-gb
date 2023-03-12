@@ -161,10 +161,7 @@ class DatabaseRequest
 
       }
     } catch (Exception $e) {
-<<<<<<< HEAD
-=======
       AgoraController::getInstance()->getEventDispatcher()->dispatch('error', $e);
->>>>>>> faeb3b1 (bug fix due to wrong sql intructions)
       AgoraController::getInstance()->issue_redirect(102);
     }
 
