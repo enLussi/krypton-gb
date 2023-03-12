@@ -40,7 +40,7 @@ async function searchMission(){
       '<div class="mission-body">'+
       '<p class="country"><span class="label">Pays concerné : </span>'+missions[element].country+'</p>'+
       '<p class="type"><span class="label">Type de mission : </span>'+missions[element].type+'</p>'+
-      '<p class="description">'+missions[element].description+'</p>'+
+      '<p class="description">'+missions[element].title+'</p>'+
       '</div>'+
       '<p class="link-mission"><a href="?mission='+missions[element].id+'">Voir la mission</a></p>'+
       '</div>'

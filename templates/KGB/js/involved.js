@@ -26,9 +26,9 @@ form_involved.onsubmit = async (e) => {
       if(r.status === 200) {
         console.log('OK')
 
-        // setTimeout(() => {
-        //   location.replace('/admin/kgb');
-        // }, 2000);
+        setTimeout(() => {
+          location.replace('/admin/kgb');
+        }, 1000);
         
       }
     });

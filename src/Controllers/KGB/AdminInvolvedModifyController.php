@@ -92,7 +92,7 @@ class AdminInvolvedModifyController extends AdminPageController
 
     switch($this->post['involved']) {
       case "1":
-        $dbrequest->requestSpecific("INSERT INTO kgb.agent (agent_id) VALUES (".$this->post['id'].")");
+        $dbrequest->requestSpecific("INSERT INTO agent (agent_id) VALUES (".$this->post['id'].")");
         foreach($this->post['type'] as $type) {
           $dbrequest->requestProcedure(('assign_spe_to_agent'), [
             $this->post['id'],
@@ -101,10 +101,10 @@ class AdminInvolvedModifyController extends AdminPageController
         }
         break;
       case "2":
-        $dbrequest->requestSpecific("INSERT INTO kgb.contact (contact_id) VALUES (".$this->post['id'].")");
+        $dbrequest->requestSpecific("INSERT INTO contact (contact_id) VALUES (".$this->post['id'].")");
         break;
       case "3":
-        $dbrequest->requestSpecific("INSERT INTO kgb.target (target_id) VALUES (".$this->post['id'].")");
+        $dbrequest->requestSpecific("INSERT INTO target (target_id) VALUES (".$this->post['id'].")");
         break;
       default:
         break;
@@ -133,7 +133,7 @@ class AdminInvolvedModifyController extends AdminPageController
     }
     if(count($dbrequest->requestSpecific("SELECT * FROM target WHERE target_id =".$this->post['id'])) > 0) {
       $dbrequest->requestSpecific(
-        "DELETE FROM kgb.target WHERE target_id =".$this->post['id']
+        "DELETE FROM target WHERE target_id =".$this->post['id']
       );
     }
 

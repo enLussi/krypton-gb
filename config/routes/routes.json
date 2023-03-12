@@ -3,5 +3,10 @@
     "path": "/",
     "admin": false,
     "controller": "App\\Controllers\\HomePageController"
+  },
+  "homesearch": {
+    "path": "/mission-search",
+    "admin": false,
+    "controller": "App\\Controllers\\HomeMissionSearchController"
   }
 }

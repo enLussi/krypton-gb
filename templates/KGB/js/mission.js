@@ -55,7 +55,7 @@ submitter.onclick = async () => {
 
         setTimeout(() => {
           location.replace('/admin/kgb');
-        }, 2000);
+        }, 1000);
       }
     });
   } else {
@@ -194,8 +194,6 @@ async function updateForm() {
     }
   }).then((t) => {
     let fetchdata = JSON.parse(t);
-
-    console.log(fetchdata);
 
     let disabled = '';
     let target_country = [];

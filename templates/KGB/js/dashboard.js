@@ -19,8 +19,6 @@ remove.forEach(element => {
     data.append('remove', true);
     data.append('id', arr[1]);
 
-    console.log(arr[0], arr[1]);
-
     let url = "";
     
     switch(arr[0]){

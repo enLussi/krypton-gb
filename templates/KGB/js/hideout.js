@@ -14,7 +14,7 @@ close.onclick = () => {
 
 form_hideout.onsubmit = async (e) => {
   e.preventDefault();
-  console.log(address_regex.test(address_input.value));
+
   if(address_regex.test(address_input.value)){
     if(form_hideout.checkValidity()) {
       await fetch ('/admin/kgb-hideout/modify', {
@@ -26,7 +26,7 @@ form_hideout.onsubmit = async (e) => {
 
           setTimeout(() => {
             location.replace('/admin/kgb');
-          }, 2000);
+          }, 1000);
         }
       });
     }
